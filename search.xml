@@ -1,12 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2022/06/12/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淺談一下 SmartPtr</title>
+    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
+    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
+<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+<span id="more"></span>
+
+
+<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
+<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
+<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>參營日常</title>
     <url>/2022/07/06/os/camp/note/</url>
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
 <span id="more"></span>
 
-<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-5"><a href="#2022-7-5" class="headerlink" title="2022-7-5"></a>2022-7-5</h3><p><strong>主要完成了 rustlings 的部分聯係</strong></p>
+<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-5"><a href="#2022-7-5" class="headerlink" title="2022-7-5"></a>2022-7-5</h3><p><strong>主要完成了 rustlings 的部分練習</strong></p>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> if</li>
 <li><input checked="" disabled="" type="checkbox"> intro</li>
@@ -85,59 +138,6 @@ background: azure;
       </categories>
       <tags>
         <tag>camp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/06/12/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>淺談一下 SmartPtr</title>
-    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
-    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
-<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
-<span id="more"></span>
-
-
-<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
-<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
-<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-        <category>loki</category>
-      </categories>
-      <tags>
-        <tag>loki</tag>
       </tags>
   </entry>
 </search>
