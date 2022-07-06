@@ -6,7 +6,78 @@
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
 <span id="more"></span>
 
-<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-6"><a href="#2022-7-6" class="headerlink" title="2022-7-6"></a>2022-7-6</h3>]]></content>
+<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-5"><a href="#2022-7-5" class="headerlink" title="2022-7-5"></a>2022-7-5</h3><p><strong>主要完成了 rustlings 的部分聯係</strong></p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> if</li>
+<li><input checked="" disabled="" type="checkbox"> intro</li>
+<li><input checked="" disabled="" type="checkbox"> structs</li>
+<li><input checked="" disabled="" type="checkbox"> variables</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>内容部分</th>
+<th>完成情況</th>
+<th>備注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>if</td>
+<td>完成</td>
+<td>簡單</td>
+</tr>
+<tr>
+<td>intro</td>
+<td>完成</td>
+<td>簡單</td>
+</tr>
+<tr>
+<td>structs</td>
+<td>完成</td>
+<td>簡單</td>
+</tr>
+<tr>
+<td>variables</td>
+<td>完成</td>
+<td>編譯器，教我如何更改代碼</td>
+</tr>
+</tbody></table>
+<p><strong>配置了本地的測試環境 – Docker</strong></p>
+<blockquote>
+<p>非常難受，非常難受的是： 如果不是開了代理這個本地環境幾乎不能完成配置</p>
+</blockquote>
+<p><strong>有一點想吐槽的點</strong></p>
+<blockquote>
+<p>Github 的 codespace 好像不是很穩定，或者説好像并發情況下表現不是很好</p>
+</blockquote>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
+<h3 id="2022-7-6"><a href="#2022-7-6" class="headerlink" title="2022-7-6"></a>2022-7-6</h3><p>主要就是改善一下<code>Dockerfile</code>的相關配置，<code>fork</code>了官方的template, 並提交了<code>pull request</code>。</p>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
+<hr>
+<h1 id="一些技術上的問題"><a href="#一些技術上的問題" class="headerlink" title="一些技術上的問題"></a>一些技術上的問題</h1><h2 id="實驗環境部署-Docker"><a href="#實驗環境部署-Docker" class="headerlink" title="實驗環境部署: Docker"></a>實驗環境部署: Docker</h2><p>處於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
+<p>因爲官方提供的Docker的基礎鏡像是<code>Ubuntu:20.04</code>，如果使用默認的官方鏡像，則在網絡不好的情況下，<code>apt-get</code>這個速度會十分緩慢，因此需要對基礎的<code>Ubuntu:20.04</code>鏡像做一些修改：</p>
+<p>首先，測試了一下，基礎的<code>Ubuntu:20.04</code>中存在<code>sed</code>命令，可以通過這個命令，修改<code>/etc/apt/sources.list</code>中的鏡像源的列表，爲了簡化操作的複雜度，我添加了一些文件為基礎的文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mkdir docker</span></span><br><span class="line"><span class="comment"># thouch registryList</span></span><br><span class="line">(root of pj)/docker/registryList</span><br></pre></td></tr></table></figure>
+
+<p>在<code>registryList</code>中輸入相應的<code>Ubuntu 20.04</code>的相關鏡像源。</p>
+<p>爲了能在<code>make build_docker</code>中使得自己的鏡像可以生效，需要對根目錄下的<code>Dockerfile</code>進行些許修改:</p>
+<figure class="highlight plaintext"><figcaption><span>Dockerfile</span><a href="https://github.com/Andre-HJR/rust-based-os-comp2022/blob/3388dcc008b6efe897c17381d1b917245b18d719/Dockerfile#L12">Dockerfile</a></figcaption><table><tr><td class="code"><pre><span class="line"># -1. (Optional) Add Ubuntu Repo</span><br><span class="line">ADD docker/registryList /etc/apt/</span><br><span class="line">RUN sed -i &quot;1r /etc/apt/registryList&quot; /etc/apt/sources.list</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於如何參與開源項目"><a href="#關於如何參與開源項目" class="headerlink" title="關於如何參與開源項目"></a>關於如何參與開源項目</h2><blockquote>
+<p>這裏僅供參考</p>
+</blockquote>
+<p>首先，找到對應的issue -&gt; fork官方的倉庫 -&gt; 把自己的fork下來的倉庫clone到相應的開發環境 -&gt; 一般開源提交，先創建一個branch，命名方式推薦 issue-{issue_id} -&gt; 將本地的代碼提交到雲端的倉庫中，並創建相應的 issue-{issu_id} branch -&gt; 解決與上游代碼的衝突， 提交pull request</p>
+]]></content>
       <categories>
         <category>os</category>
         <category>camp</category>
