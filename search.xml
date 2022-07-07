@@ -116,7 +116,19 @@ background: azure;
 "
 ></div>
 
+<h3 id="2022-7-7"><a href="#2022-7-7" class="headerlink" title="2022-7-7"></a>2022-7-7</h3><p>提交 Lab0-0 开始 Lab0-1</p>
+<blockquote>
+<p>主要困在了 <code>cl</code>的部分，没事后面解决了</p>
+</blockquote>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
 <hr>
+<h1 id="Rust-的相關筆記"><a href="#Rust-的相關筆記" class="headerlink" title="Rust 的相關筆記"></a>Rust 的相關筆記</h1><hr>
+<h1 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h1><hr>
 <h1 id="一些技術上的問題"><a href="#一些技術上的問題" class="headerlink" title="一些技術上的問題"></a>一些技術上的問題</h1><h2 id="實驗環境部署-Docker"><a href="#實驗環境部署-Docker" class="headerlink" title="實驗環境部署: Docker"></a>實驗環境部署: Docker</h2><p>處於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
 <p>因爲官方提供的Docker的基礎鏡像是<code>Ubuntu:20.04</code>，如果使用默認的官方鏡像，則在網絡不好的情況下，<code>apt-get</code>這個速度會十分緩慢，因此需要對基礎的<code>Ubuntu:20.04</code>鏡像做一些修改：</p>
 <p>首先，測試了一下，基礎的<code>Ubuntu:20.04</code>中存在<code>sed</code>命令，可以通過這個命令，修改<code>/etc/apt/sources.list</code>中的鏡像源的列表，爲了簡化操作的複雜度，我添加了一些文件為基礎的文件</p>
