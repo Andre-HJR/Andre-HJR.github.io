@@ -48,13 +48,13 @@
 <li><input disabled="" type="checkbox"> move_semantics [6]</li>
 <li><input disabled="" type="checkbox"> option [3]</li>
 <li><input disabled="" type="checkbox"> primitive_types [6]</li>
-<li><input disabled="" type="checkbox"> standard_library_types</li>
+<li><input disabled="" type="checkbox"> standard_library_types [7]</li>
 <li><input disabled="" type="checkbox"> strings [2]</li>
 <li><input checked="" disabled="" type="checkbox"> structs [3]</li>
 <li><input disabled="" type="checkbox"> tests [3]</li>
 <li><input disabled="" type="checkbox"> threads [1]</li>
 <li><input disabled="" type="checkbox"> traits [2]</li>
-<li><input checked="" disabled="" type="checkbox"> variables</li>
+<li><input checked="" disabled="" type="checkbox"> variables [6]</li>
 <li><input disabled="" type="checkbox"> quiz<ul>
 <li><input disabled="" type="checkbox"> 1</li>
 <li><input disabled="" type="checkbox"> 2</li>
