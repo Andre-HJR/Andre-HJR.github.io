@@ -142,8 +142,24 @@
 <p>接下来要让脱离了标准库的程序能输出（即支持<code>println!</code>)，这对程序的开发和调试至关重要。 我们先在用户态下实现该功能，在 此处 获取相关代码。</p>
 <p>最后把程序移植到内核态，构建在裸机上支持输出的最小运行时环境。</p>
 <div class="note default no-icon"><p>主要就是熟悉一下实验操作的流程和实验环境，并没有代码问题需要解决。</p>
-</div></div><div class="tab-pane" id="lab00-2"><div class="note warning no-icon"><p>其实，经过这个实验，可以明显感觉到网络带来的问题，那是相当地严重。主要表现在</p>
-</div></div><div class="tab-pane" id="lab00-3"><figure class="highlight bash"><figcaption><span>创建相关的Rust项目</span></figcaption><table><tr><td class="code"><pre><span class="line">cargo new os</span><br></pre></td></tr></table></figure>
+</div></div><div class="tab-pane" id="lab00-2"><div class="note warning no-icon"><p>其实，经过这个实验，可以明显感觉到网络带来的问题，那是相当地严重。主要表现在<code>Docker</code>的系统镜像构建的时候，Ubuntu系统镜像的更新，软件安装和rust的相关安装。</p>
+</div>
+
+<details class="note info no-icon"><summary><p>Nightly的Rust</p>
+</summary>
+<p>Nightly 版本的编译器允许我们在源码的开头插入特性标签（feature flag），来自由选择并使用大量实验性的功能。举个例子，要使用实验性的内联汇编（<code>asm!</code>宏），我们可以在<code>main.rs</code>的顶部添加<code>#![feature(asm)]</code>。要注意的是，这样的实验性功能不稳定（unstable），意味着未来的<code>Rust</code>版本可能会修改或移除这些功能，而不会有预先的警告过渡。因此我们只有在绝对必要的时候，才应该使用这些特性。</p>
+
+</details>
+
+<details class="note info no-icon"><summary><p>BIOS启动梳理</p>
+</summary>
+<p>几乎所有的<code>x86</code>硬件系统都支持<code>BIOS</code>启动，这也包含新型的、基于<code>UEFI</code>、用模拟<code>BIOS</code>（emulated BIOS）的方式向后兼容的硬件系统。这可以说是一件好事情，因为无论是上世纪还是现在的硬件系统，你都只需编写同样的引导启动逻辑；但这种兼容性有时也是<code>BIOS</code>引导启动最大的缺点，因为这意味着在系统启动前，你的<code>CPU</code>必须先进入一个<code>16</code>位系统兼容的实模式（real mode），这样<code>1980</code>年代古老的引导固件才能够继续使用。</p>
+<p>让我们从头开始，理解一遍<code>BIOS</code>启动的过程。</p>
+<p>当电脑启动时，主板上特殊的闪存中存储的<code>BIOS</code>固件将被加载。<code>BIOS</code>固件将会加电自检、初始化硬件，然后它将寻找一个可引导的存储介质。如果找到了，那电脑的控制权将被转交给引导程序（bootloader）：一段存储在存储介质的开头的、512字节长度的程序片段。大多数的引导程序长度都大于512字节——所以通常情况下，引导程序都被切分为一段优先启动、长度不超过512字节、存储在介质开头的第一阶段引导程序（first stage bootloader），和一段随后由其加载的、长度可能较长、存储在其它位置的第二阶段引导程序（second stage bootloader）。</p>
+<p>引导程序必须决定内核的位置，并将内核加载到内存。引导程序还需要将<code>CPU</code>从<code>16</code>位的实模式，先切换到<code>32</code>位的保护模式（protected mode），最终切换到<code>64</code>位的长模式（long mode）：此时，所有的<code>64</code>位寄存器和整个主内存（main memory）才能被访问。引导程序的第三个作用，是从<code>BIOS</code>查询特定的信息，并将其传递到内核；如查询和传递内存映射表（memory map）。</p>
+<p>编写一个引导程序并不是一个简单的任务，因为这需要使用汇编语言，而且必须经过许多意图并不明显的步骤——比如，把一些魔术数字（magic number）写入某个寄存器。因此，我们不会讲解如何编写自己的引导程序，而是推荐 bootimage 工具——它能够自动并且方便地为你的内核准备一个引导程序。</p>
+
+</details></div><div class="tab-pane" id="lab00-3"><figure class="highlight bash"><figcaption><span>创建相关的Rust项目</span></figcaption><table><tr><td class="code"><pre><span class="line">cargo new os</span><br></pre></td></tr></table></figure>
 
 <p>这里创建的是一个二进制的应用，不是一个库应用</p>
 <p>实验指导书要求我们使用<code>RISC-V</code>的指令架构，因此我们需要修改目标平台</p>
@@ -380,11 +396,38 @@ background: azure;
 "
 ></div>
 
+<h3 id="2022-7-12"><a href="#2022-7-12" class="headerlink" title="2022-7-12"></a>2022-7-12</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
+<h3 id="2022-7-13"><a href="#2022-7-13" class="headerlink" title="2022-7-13"></a>2022-7-13</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
+<h3 id="2022-7-14"><a href="#2022-7-14" class="headerlink" title="2022-7-14"></a>2022-7-14</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
+<div style="
+padding: 2px;
+background: azure;
+"
+></div>
+
 <hr>
 <h1 id="Rust-的相關筆記"><a href="#Rust-的相關筆記" class="headerlink" title="Rust 的相關筆記"></a>Rust 的相關筆記</h1><hr>
-<h1 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h1><h2 id="一些常见的指令"><a href="#一些常见的指令" class="headerlink" title="一些常见的指令"></a>一些常见的指令</h2><h3 id="一个C-gt-RISC-V-的Demo"><a href="#一个C-gt-RISC-V-的Demo" class="headerlink" title="一个C -&gt; RISC-V 的Demo"></a>一个C -&gt; RISC-V 的Demo</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> <span class="title function_">fact</span> <span class="params">(<span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ( n &lt; <span class="number">1</span> ) <span class="keyword">return</span> (<span class="number">1</span>);</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">return</span> (n * fact(n - <span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h1><h2 id="一些常见的指令"><a href="#一些常见的指令" class="headerlink" title="一些常见的指令"></a>一些常见的指令</h2><details class="note info no-icon"><summary><p>RISC-V和C</p>
+</summary>
+<p>一个C -&gt; RISC-V 的Demo</p>
+<figure class="highlight c"><figcaption><span>Ccode</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> <span class="title function_">fact</span> <span class="params">(<span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ( n &lt; <span class="number">1</span> ) <span class="keyword">return</span> (<span class="number">1</span>);</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">return</span> (n * fact(n - <span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight as"><table><tr><td class="code"><pre><span class="line">fact:</span><br><span class="line">	addi sp, sp, <span class="number">-16</span> <span class="comment">// ! adjust stack for 2 items</span></span><br><span class="line">	sd   xl, <span class="number">8</span>(sp)	 <span class="comment">// save the return address</span></span><br><span class="line">	sd   x10, <span class="number">0</span>(sp)  <span class="comment">// save the argument n</span></span><br><span class="line"><span class="comment">// ! 第一次調用fact時，sd保存程序中</span></span><br><span class="line"><span class="comment">// ! fact的地址。下面兩條指令測試</span></span><br><span class="line">addi x5, x10, <span class="number">-1</span> <span class="comment">// x5 = n - 1</span></span><br><span class="line">bge  x5, x0, L1  <span class="comment">// if (n - 1) &gt;= 0, go to L1</span></span><br><span class="line"><span class="comment">// ! 如果n小于1，fact将1放入一个值寄存器中</span></span><br><span class="line"><span class="comment">// ! 以返回1：它将1加0并加入`x10`中。</span></span><br><span class="line"><span class="comment">// ! 然后从栈中弹出两个已保存的值并</span></span><br><span class="line"><span class="comment">// ! 跳转到返回地址：</span></span><br><span class="line">addi  x10, x0, <span class="number">1</span> <span class="comment">// return 1</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// pop 2 items off stack</span></span><br><span class="line">jalr  x0, <span class="number">0</span>(x1)  <span class="comment">// return to caller</span></span><br><span class="line"><span class="comment">// ! 从栈中弹出两项之前，可以加载`x1`和`x10`。</span></span><br><span class="line"><span class="comment">// ! 因为当n小于1时`x1`和`x10`不会改变,</span></span><br><span class="line"><span class="comment">// ! 所以跳过这些指令。</span></span><br><span class="line"><span class="comment">// !   如果n不小于1，则参数n递减，</span></span><br><span class="line"><span class="comment">// ! 然后用递减后的值再次调用fact</span></span><br><span class="line">L1:</span><br><span class="line">	addi x10, x10, <span class="number">-1</span> <span class="comment">// n &gt;= 1: argument gets (n - 1)</span></span><br><span class="line">	jal  x1, fact</span><br><span class="line"><span class="comment">// ! 下一条指令是fact的返回位置，</span></span><br><span class="line"><span class="comment">// ! 其结果在`x10`中。现在旧的返回地址</span></span><br><span class="line"><span class="comment">// ! 和旧的参数与栈指针一起被恢复</span></span><br><span class="line">addi  x6, x10, <span class="number">0</span> <span class="comment">// return from jal: move result of fact</span></span><br><span class="line">ld    x10, <span class="number">0</span>(sp) <span class="comment">// restore argument n</span></span><br><span class="line">ld    x1, <span class="number">8</span>(sp)  <span class="comment">// restore the return address</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// adjust stack pointer to pop 2 items</span></span><br><span class="line"><span class="comment">// ! 接下来，参数寄存器 `x10`得到旧参数</span></span><br><span class="line"><span class="comment">// ! 与`fact(n - 1)`结果的乘积，目前在`x6`中。假设有一个乘法指令</span></span><br><span class="line">mul  x10, x10, x6 <span class="comment">// return n * fact(n - 1)</span></span><br><span class="line">jalr x0, <span class="number">0</span>(x1)    <span class="comment">// return to the caller</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight as"><figcaption><span>Ascode</span></figcaption><table><tr><td class="code"><pre><span class="line">fact:</span><br><span class="line">	addi sp, sp, <span class="number">-16</span> <span class="comment">// ! adjust stack for 2 items</span></span><br><span class="line">	sd   xl, <span class="number">8</span>(sp)	 <span class="comment">// save the return address</span></span><br><span class="line">	sd   x10, <span class="number">0</span>(sp)  <span class="comment">// save the argument n</span></span><br><span class="line"><span class="comment">// ! 第一次調用fact時，sd保存程序中</span></span><br><span class="line"><span class="comment">// ! fact的地址。下面兩條指令測試</span></span><br><span class="line">addi x5, x10, <span class="number">-1</span> <span class="comment">// x5 = n - 1</span></span><br><span class="line">bge  x5, x0, L1  <span class="comment">// if (n - 1) &gt;= 0, go to L1</span></span><br><span class="line"><span class="comment">// ! 如果n小于1，fact将1放入一个值寄存器中</span></span><br><span class="line"><span class="comment">// ! 以返回1：它将1加0并加入`x10`中。</span></span><br><span class="line"><span class="comment">// ! 然后从栈中弹出两个已保存的值并</span></span><br><span class="line"><span class="comment">// ! 跳转到返回地址：</span></span><br><span class="line">addi  x10, x0, <span class="number">1</span> <span class="comment">// return 1</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// pop 2 items off stack</span></span><br><span class="line">jalr  x0, <span class="number">0</span>(x1)  <span class="comment">// return to caller</span></span><br><span class="line"><span class="comment">// ! 从栈中弹出两项之前，可以加载`x1`和`x10`。</span></span><br><span class="line"><span class="comment">// ! 因为当n小于1时`x1`和`x10`不会改变,</span></span><br><span class="line"><span class="comment">// ! 所以跳过这些指令。</span></span><br><span class="line"><span class="comment">// !   如果n不小于1，则参数n递减，</span></span><br><span class="line"><span class="comment">// ! 然后用递减后的值再次调用fact</span></span><br><span class="line">L1:</span><br><span class="line">	addi x10, x10, <span class="number">-1</span> <span class="comment">// n &gt;= 1: argument gets (n - 1)</span></span><br><span class="line">	jal  x1, fact</span><br><span class="line"><span class="comment">// ! 下一条指令是fact的返回位置，</span></span><br><span class="line"><span class="comment">// ! 其结果在`x10`中。现在旧的返回地址</span></span><br><span class="line"><span class="comment">// ! 和旧的参数与栈指针一起被恢复</span></span><br><span class="line">addi  x6, x10, <span class="number">0</span> <span class="comment">// return from jal: move result of fact</span></span><br><span class="line">ld    x10, <span class="number">0</span>(sp) <span class="comment">// restore argument n</span></span><br><span class="line">ld    x1, <span class="number">8</span>(sp)  <span class="comment">// restore the return address</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// adjust stack pointer to pop 2 items</span></span><br><span class="line"><span class="comment">// ! 接下来，参数寄存器 `x10`得到旧参数</span></span><br><span class="line"><span class="comment">// ! 与`fact(n - 1)`结果的乘积，目前在`x6`中。假设有一个乘法指令</span></span><br><span class="line">mul  x10, x10, x6 <span class="comment">// return n * fact(n - 1)</span></span><br></pre></td></tr></table></figure>
+
+</details>
+
 <hr>
 <h1 id="一些技術上的問題"><a href="#一些技術上的問題" class="headerlink" title="一些技術上的問題"></a>一些技術上的問題</h1><div class="tabs" id="question"><ul class="nav-tabs"><li class="tab active"><a href="#question-1">实验环境的问题</a></li><li class="tab"><a href="#question-2">Question 2</a></li><li class="tab"><a href="#question-3">Question 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="question-1"><p><strong>实验环境产生的问题</strong></p>
 <div class="note default"><p>因为个人使用Docker部署实验环境， 这一部分是总结实验环境产生的一些问题，并尝试给出一些解决方案</p>
