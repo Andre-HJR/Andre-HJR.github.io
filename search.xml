@@ -1,65 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>淺談一下 SmartPtr</title>
-    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
-    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
-<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
-<span id="more"></span>
-
-
-<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
-<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
-<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-        <category>loki</category>
-      </categories>
-      <tags>
-        <tag>loki</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/06/12/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>參營日常</title>
     <url>/2022/07/06/os/camp/note/</url>
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
 <span id="more"></span>
 
-<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="主要的任务"><a href="#主要的任务" class="headerlink" title="主要的任务"></a>主要的任务</h2><h3 id="Step-0-Rustlings"><a href="#Step-0-Rustlings" class="headerlink" title="Step - 0: Rustlings"></a>Step - 0: Rustlings</h3><div class="tabs" id="rustlings"><ul class="nav-tabs"><li class="tab active"><a href="#rustlings-1">问题列表</a></li><li class="tab"><a href="#rustlings-2">Rustlings 问题汇总</a></li><li class="tab"><a href="#rustlings-3">Rustlings 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="rustlings-1"><p><strong>Problem List</strong></p>
+<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="主要的任务"><a href="#主要的任务" class="headerlink" title="主要的任务"></a>主要的任务</h2><h3 id="Step-0-Rustlings"><a href="#Step-0-Rustlings" class="headerlink" title="Step - 0: Rustlings"></a>Step - 0: Rustlings</h3><div class="tabs" id="rustlings"><ul class="nav-tabs"><li class="tab"><a href="#rustlings-1">问题列表</a></li><li class="tab active"><a href="#rustlings-2">Rustlings 问题汇总</a></li><li class="tab"><a href="#rustlings-3">Rustlings 3</a></li></ul><div class="tab-content"><div class="tab-pane" id="rustlings-1"><p><strong>Problem List</strong></p>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> advanced_errors [2]</li>
 <li><input checked="" disabled="" type="checkbox"> clippy [2]</li>
@@ -92,7 +39,7 @@
 </li>
 </ul>
 <div class="note default"><p>这是实验需要完成的任务笔记</p>
-</div></div><div class="tab-pane" id="rustlings-2"><div class="tabs" id="rslq"><ul class="nav-tabs"><li class="tab active"><a href="#rslq-1">Rust的生命周期</a></li><li class="tab"><a href="#rslq-2">rslQ 2</a></li><li class="tab"><a href="#rslq-3">rslQ 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="rslq-1"><div class="note primary"><p>这一部分主要聊一下， rust中的生命周期</p>
+</div></div><div class="tab-pane active" id="rustlings-2"><div class="tabs" id="rslq"><ul class="nav-tabs"><li class="tab"><a href="#rslq-1">Rust的生命周期</a></li><li class="tab active"><a href="#rslq-2">Rust异常处理</a></li><li class="tab"><a href="#rslq-3">rslQ 3</a></li></ul><div class="tab-content"><div class="tab-pane" id="rslq-1"><div class="note primary"><p>这一部分主要聊一下， rust中的生命周期</p>
 </div>
 
 <figure class="highlight rust"><figcaption><span>RustStatic</span><a href="https://github.com/LearningOS/learn_rust_rustlings-Andre-HJR/blob/03c8cb301d718bc0e6f8798ebc2ced8924bb89e7/exercises/strings/strings1.rs#L1">string2.rs</a></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">answer</span> = <span class="title function_ invoke__">current_favorite_color</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;My current favorite color is &#123;&#125;&quot;</span>, answer);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">current_favorite_color</span>() <span class="punctuation">-&gt;</span> &amp;<span class="symbol">&#x27;static</span> <span class="type">str</span> &#123;</span><br><span class="line">    <span class="string">&quot;blue&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -129,7 +76,41 @@
 <ul>
 <li>如果你需要添加 <code>&amp;&#39;static</code> 来让代码工作，那很可能是设计上出问题了</li>
 <li>如果你希望满足和取悦编译器，那就使用 <code>T: &#39;static</code>，很多时候它都能解决问题</li>
-</ul></div><div class="tab-pane" id="rslq-2"><p><strong>This is Sub Tab 2.</strong></p></div><div class="tab-pane" id="rslq-3"><p><strong>This is Sub Tab 3.</strong></p>
+</ul></div><div class="tab-pane active" id="rslq-2"><details class="note info no-icon"><summary><p>作业中的ErrorHandler</p>
+</summary>
+<p><strong>这是一些例题</strong></p>
+<details class="note primary no-icon"><summary><p>ErrorHandler</p>
+</summary>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">total_cost</span>(item_quantity: &amp;<span class="type">str</span>) =&gt; <span class="type">Result</span>&lt;<span class="type">i32</span>, ParseIntError&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">processing_fee</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">cost_per_item</span>  = <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">qty</span> = item_quantity.parse::&lt;<span class="type">i32</span>&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(qty * cost_per_item + processing_fee)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">total_cost</span>(item_quantity: &amp;<span class="type">str</span>) =&gt; <span class="type">Result</span>&lt;<span class="type">i32</span>, ParseIntError&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">processing_fee</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">cost_per_item</span>  = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">qty</span> = item_quantity.parse::&lt;<span class="type">i32</span>&gt;()?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(qty * cost_per_item + processing_fee)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+<details class="note primary no-icon"><summary><p>AdvanceErrorHandler</p>
+</summary>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">from</span>(e: CreationError) <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> complete this implementation so that the `?` operator will</span></span><br><span class="line">    <span class="comment">// work for `CreationError`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> implement another instance of the `From` trait here so that the</span></span><br><span class="line"><span class="comment">// `?` operator will work in the other place in the `FromStr`</span></span><br><span class="line"><span class="comment">// implementation below</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">from</span>(e: CreationError) <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> complete this implementation so that the `?` operator will</span></span><br><span class="line">    <span class="comment">// work for `CreationError`</span></span><br><span class="line">    <span class="keyword">Self</span>::<span class="title function_ invoke__">Creation</span>(e)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> implement another instance of the `From` trait here so that the</span></span><br><span class="line"><span class="comment">// `?` operator will work in the other place in the `FromStr`</span></span><br><span class="line"><span class="comment">// implementation below</span></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">From</span>&lt;ParseIntError&gt; <span class="keyword">for</span> <span class="title class_">ParsePosNonzeroError</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">from</span>(e: ParseIntError) <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123; <span class="keyword">Self</span>::<span class="title function_ invoke__">ParseInt</span>(e) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+</details>
+
+<p><strong>Rust的错误哲学</strong></p>
+<p>错误对于软件来说是不可能避免的，因此一门优秀的编程语言必须有其完整的错误处理哲学。在很多情况下，Rust需要你承认自己的 代码可能会出错，并提前采取行动，来处理这些错误。</p>
+<details class="note default no-icon"><summary><p>Rust中的错误主要分为两类</p>
+</summary>
+<ul>
+<li><strong>可恢复错误</strong>，通常用于从系统全局角度来看可以接受的错误，例如处理用户的访问、操作等错误，这些错误只会影响某个用户自身的操作进程，而不会对系统的全局稳定性产生影响。</li>
+<li><strong>不可恢复错误</strong>，刚好相反，该错误通常是全局性或者系统性的错误，例如数组越界访问，系统启动时发生了影响启动流程的错误等等，这些错误的影响往往对于系统来说是致命的。</li>
+</ul>
+
+</details>
+
+<details class="note danger no-icon"><summary><p>Attention</p>
+</summary>
+<p>很多编程语言，并不会区分这些错误，而是直接采用异常的方式去处理。Rust没有异常，但是Rust也有自己的卧龙凤雏： <code>Result&lt;T, E&gt;</code>用于可恢复错误，<code>panic!</code>用于不可恢复错误。</p>
+
+</details></div><div class="tab-pane" id="rslq-3"><p><strong>This is Sub Tab 3.</strong></p>
 <div class="tabs" id="sub-sub-tabs"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-tabs-1">Sub-Sub Tabs 1</a></li><li class="tab"><a href="#sub-sub-tabs-2">Sub-Sub Tabs 2</a></li><li class="tab"><a href="#sub-sub-tabs-3">Sub-Sub Tabs 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-tabs-1"><p><strong>This is Sub-Sub Tab 1 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-2"><p><strong>This is Sub-Sub Tab 2 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-3"><p><strong>This is Sub-Sub Tab 3 of Sub Tab 3.</strong></p></div></div></div></div></div></div></div><div class="tab-pane" id="rustlings-3"><p><strong>This is Tab 3.</strong></p>
 <div class="tabs" id="sub-tabs"><ul class="nav-tabs"><li class="tab active"><a href="#sub-tabs-1">Sub Tabs 1</a></li><li class="tab"><a href="#sub-tabs-2">Sub Tabs 2</a></li><li class="tab"><a href="#sub-tabs-3">Sub Tabs 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-tabs-1"><p><strong>This is Sub Tab 1.</strong></p></div><div class="tab-pane" id="sub-tabs-2"><p><strong>This is Sub Tab 2.</strong></p></div><div class="tab-pane" id="sub-tabs-3"><p><strong>This is Sub Tab 3.</strong></p>
 <div class="tabs" id="sub-sub-tabs"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-tabs-1">Sub-Sub Tabs 1</a></li><li class="tab"><a href="#sub-sub-tabs-2">Sub-Sub Tabs 2</a></li><li class="tab"><a href="#sub-sub-tabs-3">Sub-Sub Tabs 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-tabs-1"><p><strong>This is Sub-Sub Tab 1 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-2"><p><strong>This is Sub-Sub Tab 2 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-3"><p><strong>This is Sub-Sub Tab 3 of Sub Tab 3.</strong></p></div></div></div></div></div></div></div></div></div>
@@ -305,7 +286,7 @@
 <p>在上一节中我们为用户态程序实现的 <code>println</code> 宏，略作修改即可用于本节的内核态操作系统。 详见 <code>os/src/console.rs</code>。</p>
 <p>利用 <code>println</code> 宏，我们重写异常处理函数 <code>panic</code>，使其在 panic 时能打印错误发生的位置。 相关代码位于 <code>os/src/lang_items.rs</code> 中。</p>
 <p>我们还使用第三方库 <code>log</code> 为你实现了日志模块，相关代码位于 <code>os/src/logging.rs</code> 中。</p></div><div class="tab-pane" id="lab00-4"><div class="note info no-icon"><p>个人觉得，CI的这种策略真的是不错，很有自动化的味道，所有检测所需的动作，可以以<code>config</code>的方式完整的确认下来，真的是一个不错的体验。</p>
-</div></div></div></div></div><div class="tab-pane" id="lab-2"></div><div class="tab-pane" id="lab-3"></div><div class="tab-pane" id="lab-4"></div><div class="tab-pane" id="lab-5"></div><div class="tab-pane" id="lab-6"></div><div class="tab-pane" id="lab-7"></div></div></div>
+</div></div></div></div></div><div class="tab-pane" id="lab-2"><div class="tabs" id="01"><ul class="nav-tabs"><li class="tab active"><a href="#01-1">实验描述</a></li><li class="tab"><a href="#01-2">实验问题</a></li><li class="tab"><a href="#01-3">实验报告</a></li><li class="tab"><a href="#01-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="01-1"></div><div class="tab-pane" id="01-2"></div><div class="tab-pane" id="01-3"></div><div class="tab-pane" id="01-4"></div></div></div></div><div class="tab-pane" id="lab-3"><div class="tabs" id="lab_1"><ul class="nav-tabs"><li class="tab active"><a href="#lab_1-1">实验描述</a></li><li class="tab"><a href="#lab_1-2">实验问题</a></li><li class="tab"><a href="#lab_1-3">实验报告</a></li><li class="tab"><a href="#lab_1-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_1-1"></div><div class="tab-pane" id="lab_1-2"></div><div class="tab-pane" id="lab_1-3"></div><div class="tab-pane" id="lab_1-4"></div></div></div></div><div class="tab-pane" id="lab-4"><div class="tabs" id="lab_2"><ul class="nav-tabs"><li class="tab active"><a href="#lab_2-1">实验描述</a></li><li class="tab"><a href="#lab_2-2">实验问题</a></li><li class="tab"><a href="#lab_2-3">实验报告</a></li><li class="tab"><a href="#lab_2-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_2-1"></div><div class="tab-pane" id="lab_2-2"></div><div class="tab-pane" id="lab_2-3"></div><div class="tab-pane" id="lab_2-4"></div></div></div></div><div class="tab-pane" id="lab-5"><div class="tabs" id="lab_3"><ul class="nav-tabs"><li class="tab active"><a href="#lab_3-1">实验描述</a></li><li class="tab"><a href="#lab_3-2">实验问题</a></li><li class="tab"><a href="#lab_3-3">实验报告</a></li><li class="tab"><a href="#lab_3-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_3-1"></div><div class="tab-pane" id="lab_3-2"></div><div class="tab-pane" id="lab_3-3"></div><div class="tab-pane" id="lab_3-4"></div></div></div></div><div class="tab-pane" id="lab-6"><div class="tabs" id="lab_4"><ul class="nav-tabs"><li class="tab active"><a href="#lab_4-1">实验描述</a></li><li class="tab"><a href="#lab_4-2">实验问题</a></li><li class="tab"><a href="#lab_4-3">实验报告</a></li><li class="tab"><a href="#lab_4-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_4-1"></div><div class="tab-pane" id="lab_4-2"></div><div class="tab-pane" id="lab_4-3"></div><div class="tab-pane" id="lab_4-4"></div></div></div></div><div class="tab-pane" id="lab-7"><div class="tabs" id="lab_5"><ul class="nav-tabs"><li class="tab active"><a href="#lab_5-1">实验描述</a></li><li class="tab"><a href="#lab_5-2">实验问题</a></li><li class="tab"><a href="#lab_5-3">实验报告</a></li><li class="tab"><a href="#lab_5-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_5-1"></div><div class="tab-pane" id="lab_5-2"></div><div class="tab-pane" id="lab_5-3"></div><div class="tab-pane" id="lab_5-4"></div></div></div></div></div></div>
 
 <h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-5"><a href="#2022-7-5" class="headerlink" title="2022-7-5"></a>2022-7-5</h3><p><strong>主要完成了 rustlings 的部分練習</strong></p>
 <table>
@@ -488,6 +469,59 @@ background: azure;
       </categories>
       <tags>
         <tag>camp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/06/12/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淺談一下 SmartPtr</title>
+    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
+    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
+<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+<span id="more"></span>
+
+
+<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
+<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
+<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
       </tags>
   </entry>
 </search>
