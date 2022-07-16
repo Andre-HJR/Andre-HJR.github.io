@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2022/06/12/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淺談一下 SmartPtr</title>
+    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
+    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
+<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+<span id="more"></span>
+
+
+<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
+<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
+<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>參營日常</title>
     <url>/2022/07/06/os/camp/note/</url>
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
@@ -109,6 +162,153 @@
 <details class="note danger no-icon"><summary><p>Attention</p>
 </summary>
 <p>很多编程语言，并不会区分这些错误，而是直接采用异常的方式去处理。Rust没有异常，但是Rust也有自己的卧龙凤雏： <code>Result&lt;T, E&gt;</code>用于可恢复错误，<code>panic!</code>用于不可恢复错误。</p>
+
+</details>
+
+<p><strong><code>PANIC</code>部分</strong></p>
+<details class="note info no-icon"><summary><p><code>panic</code>时的两种终止方式</p>
+</summary>
+<p>当出现<code>panic!</code>时，程序提供了两种方式来处理终止流程：<strong>栈展开</strong>和<strong>直接终止</strong></p>
+<p>其中，默认的方式就是 栈展开，这意味着<code>Rust</code>会回溯栈上数据和函数调用，因此也意味着更多的善后工作，好处是可以给出充分的报错信息和栈调用信息，便于事后的问题复盘。直接终止，顾名思义，不清理数据就直接退出程序，善后工作交与操作系统来负责。</p>
+<p>对于绝大多数用户，使用默认选择是最好的，但是当你关心最终编译出的二进制可执行文件大小时，那么可以尝试去使用直接终止的方式，例如下面的配置修改<code>Cargo.toml</code>文件，实现在<code>release</code>模式下遇到<code>panic</code>直接终止：</p>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="section">[profile.release]</span></span><br><span class="line"><span class="attr">panic</span> = <span class="string">&#x27;abort&#x27;</span></span><br></pre></td></tr></table></figure>
+
+</details>
+
+<details class="note danger no-icon"><summary><p>何时该<code>panic!</code></p>
+</summary>
+<p>下面尝试罗列何时适合使用<code>panic</code>，首先我们先看一些背景</p>
+<details class="note info no-icon"><summary><p>前景知识</p>
+</summary>
+<p>在<code>Result&lt;T, E&gt;</code>这个枚举类型，它是用来表示函数的返回结果：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Result</span>&lt;T, E&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(T),</span><br><span class="line">    <span class="title function_ invoke__">Err</span>(E),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当没有错误发生时，函数返回一个用<code>Result</code>类型包裹的值<code>Ok(T)</code>，当错误时，返回一个<code>Err(E)</code>。对于<code>Result</code>返回我们有很多处理方法，最见到那粗暴的解释<code>unwrap</code>和<code>except</code>，这两个函数非常类似，我们以<code>unwrap</code>举例：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::net::IpAddr;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">lo</span>: IpAddr = <span class="string">&quot;127.0.0.1&quot;</span>.<span class="title function_ invoke__">parse</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
+
+<p>上面<code>parse</code>方法试图将字符串<code>&quot;127.0.0.1&quot;</code>解析位一个<code>IP</code>地址类型<code>IpAddr</code>，它返回一个<code>Result&lt;IpAddr, E&gt;</code>类型，如果解析成功，则把<code>Ok(IpAddr)</code>中的值赋值给<code>lo</code>，如果失败，则不处理<code>Err(E)</code>，而是直接<code>panic</code></p>
+<p>因此 <code>unwrap</code> 简言之，成功就是返回值，失败则是<code>panic</code>，总之并不能进行错误处理。</p>
+
+</details>
+
+<p><strong>示例、原型、测试</strong></p>
+<p>这几个场景下，需要快速地搭建代码，错误处理会拖慢编码的速度，也不是特别有必要，因此通过<code>unwrap</code>、<code>expect</code>等方法来处理是最快的。</p>
+<p>同时，当我们回头准备做错误处理时，可以全局搜索这些方法，不遗漏地进行替换。</p>
+<p><strong>确切纸雕程序是正确的，可以使用<code>panic</code></strong></p>
+<p>因为<code>panic</code>的触发方式比错误处理要简单，因此可以让代码更清晰，可读性也更加好，当我们的代码注定是正确时，你可以用<code>unwrap</code>等方法直接进行处理，反正也不可能<code>panic</code>：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::net::IpAddr;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">lo</span>: IpAddr = <span class="string">&quot;127.0.0.1&quot;</span>.<span class="title function_ invoke__">parse</span>().<span class="title function_ invoke__">unwrap</span>();</span><br></pre></td></tr></table></figure>
+例如上面的例子，`"127.0.0.1"`就是`ip`地址，因此我们知道`parse`方法一定会成功，那么就可以直接用`unwrap`方法进行处理。
+
+<p>当然，如果该字符串是来自于用户输入，那在实际项目中，就必须用错误处理的方式，而不是<code>unwrap</code>，否则你的程序一天要崩溃几十万次吧！</p>
+<p><strong>可能导致全局有害状态时</strong></p>
+<details class="note danger no-icon"><summary><p>有害状态分类</p>
+</summary>
+<ul>
+<li>非预期的错误</li>
+<li>后续代码的运行会受到显著影响</li>
+<li>内存安全的问题</li>
+</ul>
+
+</details>
+
+<p>当错误预期会出现时，返回一个错误较为合适，例如解析器接收到格式错误的数据，<code>HTTP</code>请求接收到错误的参数甚至该请求内的任何错误（不会导致整个程序有问题，只影响该次请求）。因为错误是可预期的，因此也是可以处理的。</p>
+<p>当启动时某个流程发生了错误，对后续代码的运行造成了影响，那么就应该使用<code>panic</code>，而不是处理错误后继续运行，当然你可以通过重试的方式来继续。</p>
+<p>上面提到过，数组访问越界，就要<code>panic</code>的原因，这个就是属于内存安全的范畴，一旦内存访问不安全，那么我们就无法保证自己的程序会怎么运行下去，也无法保证逻辑和数据的正确性。</p>
+<details class="note default no-icon"><summary><p><code>panic</code>原理剖析</p>
+</summary>
+<p>本来不想写这块儿内容，因为真的难写，但是转念一想，既然号称圣经，那么本书就得与众不同，避重就轻显然不是该有的态度。</p>
+<p>当调用<code>panic!</code>宏时，它会</p>
+<details class="note danger no-icon"><summary><p><code>panic!</code>的流程</p>
+</summary>
+<ol>
+<li>格式化<code>panic</code>信息，然后使用该信息作为参数，调用<code>std::panic::panic_any()</code>函数</li>
+<li><code>panic_any</code>会检查应用是否使用了<code>panic hook</code>，如果使用了，该<code>hook</code>函数就会被调用（<code>hook</code>是一个钩子函数，是外部代码设置的，用于在<code>panic</code>触发时，执行外部代码所需的功能）</li>
+<li>当<code>hook</code>函数返回后，当前的线程就开始进行栈展开：从<code>panic_any</code>开始，如果寄存器或者栈因为某些原因信息错乱了，那很可能该展开会发生异常，最终线程会直接停止，展开也无法继续进行</li>
+<li>展开的过程是一帧一帧的去回溯整个栈，每个帧的数据都会随之被丢弃，但是在展开过程中，你可能会遇到被用户标记为<code>catching</code>的帧（通过<code>std::panic::catch_unwind()</code>函数标记），此时用户提供的<code>catch</code>函数会被调用，展开也随之停止：当然，如果<code>catch</code>选择在内部调用<code>std::panic::resume_unwind()</code>函数，则展开还会继续。</li>
+</ol>
+
+</details>
+
+<p>还有一种情况，在展开过程中，如果展开本身<code>panic</code>了，那展开线程会终止，展开也随之停止。</p>
+<p>一旦线程展开被终止或者完成，最终的输出结果是取决于哪个线程<code>panic</code>：对于<code>main</code>线程，操作系统提供的终止功能<code>core::intrinsics::abort()</code>会被调用，最终结束当前的<code>panic</code>进程；如果是其它子线程，那么子线程就会简单的终止，同时信息会在稍后通过<code>std::thread::join()</code>进行收集。</p>
+
+</details>
+
+
+</details>
+
+<p><strong>可恢复的错误<code>Result</code></strong></p>
+<p>假设，我们有一台消息服务器，每个用户都通过<code>websocket</code>连接到该服务器来接收和发送消息，该过程就涉及到<code>socket</code>文件的读写，那么此时，如果一个用户的读写发生了错误，显然不能直接<code>panic</code>，否则服务器会直接崩溃，所有用户都会断开连接，因此我们需要一种更温和的错误处理方式：<code>Result&lt;T, E&gt;</code>。</p>
+<p><code>Result</code>的定义如下:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Result</span>&lt;T, E&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(T), </span><br><span class="line">    <span class="title function_ invoke__">Err</span>(E),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>泛型参数<code>T</code>代表成功时存入的正确值的类型，存放方式是<code>Ok(T)</code>，<code>E</code>代表错误是存入的错误值，存放方式是<code>Err(E)</code>。</p>
+<p>由于<code>Result</code>是被包含在<code>prelude</code>中，因此无需手动引入<code>std::result::Result</code>，那么返回值可以简化位<code>Result&lt;std::fs::File, std::io::Error&gt;</code>，这很像标准的<code>Result&lt;T, E&gt;</code>枚举定义，只不过<code>T,E</code>被替换成了相应具体的类型。</p>
+<p>这个返回值类型说明<code>File::open</code>调用成功则返回一个可以进行读写的文件句柄，如果失败，则返回一个IO错误。总之<code>File::open</code>需要一个方式告知调用者是成功还是失败，并同时返回具体的文件句柄或错误信息，我们可以通过<code>Result</code>的枚举提供，如下：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs::File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;Hello.txt&quot;</span>);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">f</span> = <span class="keyword">match</span> f &#123;</span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(file) =&gt; file,</span><br><span class="line">        <span class="title function_ invoke__">Err</span>(error) =&gt; &#123;</span><br><span class="line">            <span class="built_in">panic!</span>(<span class="string">&quot;Problem opening the file: &#123;:?&#125;&quot;</span>, error)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码很清晰，对打开文件后的<code>Result&lt;T, E&gt;</code>类型进行匹配取值，如果是成功，则将<code>Ok(file)</code>中存放的的文件句柄<code>file</code>赋值给<code>f</code>，如果失败，则将<code>Err(error)</code>中存放的错误信息<code>error</code>使用<code>panic</code>抛出来，进而结束程序，这非常符合上文提到过的<code>panic</code>使用场景。</p>
+<p><strong>错误传播</strong></p>
+<p>咱们的程序几乎不太可能只有<code>A-&gt;B</code>形式的函数调用，一个设计良好的程序，一个功能涉及十几层的函数调用都有可能。而错误处理也往往不是哪里调用出错，就在哪里处理，实际应用中，大概率会把错误层层上传然后交给调用链的上游函数进行处理，错误传播将极为常见。</p>
+<p>例如以下函数从文件中读取用户名，然后将结果进行返回：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#![allow(unused)]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line"><span class="keyword">use</span> std::fs::File;</span><br><span class="line"><span class="keyword">use</span> std::io::&#123;<span class="keyword">self</span>, Read&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">read_username_from_file</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="comment">// 打开文件，f是`Result&lt;文件句柄,io::Error&gt;`</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;hello.txt&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">f</span> = <span class="keyword">match</span> f &#123;</span><br><span class="line">        <span class="comment">// 打开文件成功，将file句柄赋值给f</span></span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(file) =&gt; file,</span><br><span class="line">        <span class="comment">// 打开文件失败，将错误返回(向上传播)</span></span><br><span class="line">        <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(e),</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// 创建动态字符串s</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">s</span> = String::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    <span class="comment">// 从f文件句柄读取数据并写入s中</span></span><br><span class="line">    <span class="keyword">match</span> f.<span class="title function_ invoke__">read_to_string</span>(&amp;<span class="keyword">mut</span> s) &#123;</span><br><span class="line">        <span class="comment">// 读取成功，返回Ok封装的字符串</span></span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(_) =&gt; <span class="title function_ invoke__">Ok</span>(s),</span><br><span class="line">        <span class="comment">// 将错误向上传播</span></span><br><span class="line">        <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="title function_ invoke__">Err</span>(e),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有几点值得注意：</p>
+<ul>
+<li>该函数返回一个<code>Result&lt;String, io::Error&gt;</code>类型，当读取用户名成功时，返回<code>Ok(String)</code>，失败时，返回<code>Err(io:Error)</code></li>
+<li><code>File::open</code>和<code>f.read_to_string</code>返回的<code>Result&lt;T, E&gt;</code>中的<code>E</code>就是<code>io::Error</code></li>
+</ul>
+<p>由此可见，该函数将<code>io::Error</code>的错误往上进行传播，该函数的调用者最终会对<code>Result&lt;String,io::Error&gt;</code>进行再处理，至于怎么处理就是调用者的事，如果是错误，它可以选择继续向上传播错误，也可以直接<code>panic</code>，亦或将具体的错误原因包装后写入<code>socket</code>中呈现给终端用户。</p>
+<p>但是上面的代码也有自己的问题，那就是太长了(优秀的程序员身上的优点极多，其中最大的优点就是懒)，我自认为也有那么一点点优秀，因此见不到这么啰嗦的代码，下面咱们来讲讲如何简化它。</p>
+<details class="note default no-icon"><summary><p><code>?</code>特殊的传播符号</p>
+</summary>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs::File;</span><br><span class="line"><span class="keyword">use</span> std::io;</span><br><span class="line"><span class="keyword">use</span> std::io::Read;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">read_username_from_file</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;hello.txt&quot;</span>)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">s</span> = String::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    f.<span class="title function_ invoke__">read_to_string</span>(&amp;<span class="keyword">mut</span> s)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+看到没，这就是排面，相比前面的`match`处理错误的函数，代码直接减少了一半不止，但是，一山更比一山难，看不懂啊！ 其实`?`就是一个宏，它的作用跟上面的`match`几乎一模一样。
+
+
+<p>虽然<code>?</code>和<code>match</code>功能一致，但是事实上<code>?</code>会更胜一筹。何解？</p>
+<p>想象一下，一个设计良好的系统中，肯定有自定义的错误特征，错误之间很可能会存在上下级关系，例如标准库中的<code>std::io::Error</code>和<code>std::error::Error</code>，前者是<code>IO</code>相关的错误结构体，后者是一个最最通用的标准错误特征，同时前者实现了后者，因此<code>std::io::Error</code>可以转换为<code>std:error::Error</code>。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">open_file</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;File, <span class="type">Box</span>&lt;<span class="keyword">dyn</span> std::error::Error&gt;&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;hello.txt&quot;</span>)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(f)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中<code>File::open</code>报错时返回的错误是<code>std::io::Error</code>类型，但是<code>open_file</code>函数返回的错误类型是<code>std::error::Error</code>的特征对象，可以看到一个错误类型通过<code>?</code>返回后，变成了另一个错误类型，这就是<code>?</code>的神奇之处。</p>
+<p>根本原因是在于标准库中定义的<code>From</code>特征，该特征有一个方法<code>from</code>，用于把一个类型转成另外一个类型，<code>?</code>可以自动调用该方法，然后进行隐式类型转换。因此只要函数返回的错误<code>ReturnError</code>实现了<code>From&lt;OtherError&gt;</code>特征，那么<code>?</code>就会自动把<code>OtherError</code>转换为<code>ReturnError</code>。</p>
+<p>这种转换非常好用，意味着你可以用一个大而全的<code>ReturnError</code>来覆盖所有错误类型，只需要为各种子错误类型实现这种转换即可。</p>
+<p><code>?</code>还能实现链式调用，<code>File::open</code>遇到错误就返回，没有错误就将<code>Ok</code>中的值取出来用于下一个方法调用，简直太精妙了。</p>
+<details class="note info no-icon"><summary><p><code>?</code>用于<code>Option</code>返回</p>
+</summary>
+<p><code>?</code>不仅仅可以用于<code>Result</code>的传播，还能用于<code>Option</code>的传播，再来回忆下<code>Option</code>的定义：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">enum</span> <span class="title class_">Option</span>&lt;T&gt; &#123;</span><br><span class="line">    <span class="title function_ invoke__">Some</span>(T),</span><br><span class="line">    <span class="literal">None</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+`Result`通过`?`返回错误，那么`Option`就通过`?`返回`None`：
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">first</span>(arr: &amp;[<span class="type">i32</span>]) <span class="punctuation">-&gt;</span> <span class="type">Option</span>&lt;&amp;<span class="type">i32</span>&gt; &#123;</span><br><span class="line">   <span class="keyword">let</span> <span class="variable">v</span> = arr.<span class="title function_ invoke__">get</span>(<span class="number">0</span>)?;</span><br><span class="line">   <span class="title function_ invoke__">Some</span>(v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+上面的函数中，`arr.get`返回一个`Option<&i32>`类型，因为`?`的使用，如果`get`的结果是`None`，则直接返回`None`，如果是`Some(&i32)`，则把里面的值赋给`v`。
+
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">last_char_of_first_line</span>(text: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> <span class="type">Option</span>&lt;<span class="type">char</span>&gt; &#123;</span><br><span class="line">    text.<span class="title function_ invoke__">lines</span>().<span class="title function_ invoke__">next</span>()?.<span class="title function_ invoke__">chars</span>().<span class="title function_ invoke__">last</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码展示了在链式调用中使用<code>?</code>提前返回<code>None</code>的用法，<code>.next</code>方法返回的是<code>Option</code>类型：如果返回<code>Some(&amp;str)</code>，那么继续调用<code>chars</code>方法,如果返回<code>None</code>，则直接从整个函数中返回<code>None</code>，不再继续进行链式调用。</p>
+
+</details>
+
+<details class="note danger no-icon"><summary><p><code>?</code>常会犯的错</p>
+</summary>
+<p>初学者在用<code>?</code>时，老是会犯错，例如写出这样的代码：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">first</span>(arr: &amp;[<span class="type">i32</span>]) <span class="punctuation">-&gt;</span> <span class="type">Option</span>&lt;&amp;<span class="type">i32</span>&gt; &#123;</span><br><span class="line">   arr.<span class="title function_ invoke__">get</span>(<span class="number">0</span>)?</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码无法通过编译，切记：<code>?</code>操作符需要一个变量来承载正确的值，这个函数只会返回<code>Some(&amp;i32)</code>或者<code>None</code>，只有错误值能直接返回，正确的值不行，所以如果数组中存在<code>0</code>号元素，那么函数第二行使用<code>?</code>后的返回类型为<code>&amp;i32</code>而不是<code>Some(&amp;i32)</code>。因此 ? 只能用于以下形式：</p>
+<ul>
+<li><code>let v = xxx()?</code>;</li>
+<li><code>xxx()?.yyy()?</code>;</li>
+</ul>
+<p><strong>带返回值的<code>main</code>函数</strong></p>
+<p>在了解了<code>?</code>的使用限制后，这段代码你很容易看出它无法编译：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs::File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;hello.txt&quot;</span>)?;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+因为`?`要求`Result<T, E>`形式的返回值，而`main`函数的返回是`()`，因此无法满足，那是不是就无解了呢？
+
+<p>实际上<code>Rust</code>还支持另外一种形式的<code>main</code>函数：</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::error::Error;</span><br><span class="line"><span class="keyword">use</span> std::fs::File;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), <span class="type">Box</span>&lt;<span class="keyword">dyn</span> Error&gt;&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">f</span> = File::<span class="title function_ invoke__">open</span>(<span class="string">&quot;hello.txt&quot;</span>)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+这样就能使用`?`提前返回了，同时我们又一次看到了`Box<dyn Error>`特征对象，因为`std::error:Error`是`Rust`中抽象层次最高的错误，其它标准库中的错误都实现了该特征，因此我们可以用该特征对象代表一切错误，就算`main`函数中调用任何标准库函数发生错误，都可以通过`Box<dyn Error>`这个特征对象进行返回.
+
+</details>
 
 </details></div><div class="tab-pane" id="rslq-3"><p><strong>This is Sub Tab 3.</strong></p>
 <div class="tabs" id="sub-sub-tabs"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-tabs-1">Sub-Sub Tabs 1</a></li><li class="tab"><a href="#sub-sub-tabs-2">Sub-Sub Tabs 2</a></li><li class="tab"><a href="#sub-sub-tabs-3">Sub-Sub Tabs 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-tabs-1"><p><strong>This is Sub-Sub Tab 1 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-2"><p><strong>This is Sub-Sub Tab 2 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-3"><p><strong>This is Sub-Sub Tab 3 of Sub Tab 3.</strong></p></div></div></div></div></div></div></div><div class="tab-pane" id="rustlings-3"><p><strong>This is Tab 3.</strong></p>
@@ -469,59 +669,6 @@ background: azure;
       </categories>
       <tags>
         <tag>camp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/06/12/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>淺談一下 SmartPtr</title>
-    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
-    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
-<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
-<span id="more"></span>
-
-
-<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
-<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
-<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-        <category>loki</category>
-      </categories>
-      <tags>
-        <tag>loki</tag>
       </tags>
   </entry>
 </search>
