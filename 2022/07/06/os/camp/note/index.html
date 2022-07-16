@@ -28,7 +28,7 @@
 <meta property="og:description" content="這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。">
 <meta property="og:locale" content="zh_HK">
 <meta property="article:published_time" content="2022-07-06T11:28:17.000Z">
-<meta property="article:modified_time" content="2022-07-16T13:26:47.616Z">
+<meta property="article:modified_time" content="2022-07-16T13:42:06.378Z">
 <meta property="article:author" content="Andre">
 <meta property="article:tag" content="camp">
 <meta name="twitter:card" content="summary">
@@ -250,7 +250,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-07-16 21:26:47" itemprop="dateModified" datetime="2022-07-16T21:26:47+08:00">2022-07-16</time>
+      <time title="修改時間：2022-07-16 21:42:06" itemprop="dateModified" datetime="2022-07-16T21:42:06+08:00">2022-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -642,10 +642,10 @@
 <p>首先封装以下对<code>SYSCALL_WRITE</code>系统调用</p>
 <figure class="highlight rust"><figcaption><span>os/src/main.rs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> SYSCALL_WRITE: <span class="type">usize</span> =  <span class="number">64</span>;</span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">sys_wirte</span>(fd: <span class="type">usize</span>, buffer: &amp;[<span class="type">u8</span>]) <span class="punctuation">-&gt;</span> <span class="type">isize</span> &#123;</span><br><span class="line">    <span class="title function_ invoke__">syscall</span>(SYSCALL_WRITE, [fd, buffer.<span class="title function_ invoke__">as_ptr</span>() <span class="keyword">as</span> <span class="type">usize</span>, buffer.<span class="title function_ invoke__">len</span>()])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>软后实现居于<code>Write</code>的<code>Trait</code>的数据结构，并完成<code>Write Trait</code>所需要的<code>write_str</code>函数，并用<code>print</code>函数进行封装。</p>
+<p>软后实现基于<code>Write</code>的<code>Trait</code>的数据结构，并完成<code>Write Trait</code>所需要的<code>write_str</code>函数，并用<code>print</code>函数进行封装。</p>
 <figure class="highlight rust"><figcaption><span>os/src/console.rs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Stdout</span>;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Wirte</span> <span class="keyword">for</span> <span class="title class_">Stdout</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">wirte_str</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, s: &amp;<span class="type">str</span>) <span class="punctuation">-&gt;</span> fmt::<span class="type">Result</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">sys_write</span>(<span class="number">1</span>, s.<span class="title function_ invoke__">as_bytes</span>());</span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">print</span>(args: fmt::Arguments) &#123;</span><br><span class="line">    Stdout.<span class="title function_ invoke__">write_fmt</span>(args).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>最后，实现居于<code>print</code>函数，实现<code>Rust</code>语言的格式化宏</p>
+<p>最后，实现基于<code>print</code>函数，实现<code>Rust</code>语言的格式化宏</p>
 <figure class="highlight rust"><figcaption><span>os/src/console.rs</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="built_in">macro_rules!</span> print &#123;</span><br><span class="line">    ($fmt: literal $(, $($arg: tt)+)?) =&gt; &#123;</span><br><span class="line">        $crate::console::<span class="title function_ invoke__">print</span>(<span class="built_in">format_args!</span>($fmt $(, $($arg)+)?));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">macro_rules!</span> println &#123;</span><br><span class="line">    ($fmt: literal $(, $($arg: tt)+)?) =&gt; &#123;</span><br><span class="line">      $crate::console::<span class="title function_ invoke__">print</span>(<span class="built_in">format_args!</span>(<span class="built_in">concat!</span>($fmt, <span class="string">&quot;\n&quot;</span>) $(, $($arg)+)?));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>再次重新编译，我们就可以看到相应的输出</p>
