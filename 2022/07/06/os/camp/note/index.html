@@ -28,7 +28,7 @@
 <meta property="og:description" content="這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。">
 <meta property="og:locale" content="zh_HK">
 <meta property="article:published_time" content="2022-07-06T11:28:17.000Z">
-<meta property="article:modified_time" content="2022-07-16T15:33:02.296Z">
+<meta property="article:modified_time" content="2022-07-16T15:33:47.301Z">
 <meta property="article:author" content="Andre">
 <meta property="article:tag" content="camp">
 <meta name="twitter:card" content="summary">
@@ -250,7 +250,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2022-07-16 23:33:02" itemprop="dateModified" datetime="2022-07-16T23:33:02+08:00">2022-07-16</time>
+      <time title="修改時間：2022-07-16 23:33:47" itemprop="dateModified" datetime="2022-07-16T23:33:47+08:00">2022-07-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -852,7 +852,7 @@ background: azure;
 <div class="note default"><p>因为个人使用Docker部署实验环境， 这一部分是总结实验环境产生的一些问题，并尝试给出一些解决方案</p>
 </div>
 
-<div class="tabs" id="sub-sub-category"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-category-1">Ubuntu部分的问题</a></li><li class="tab"><a href="#sub-sub-category-2">Cargo部分的问题</a></li><li class="tab"><a href="#sub-sub-category-3">qemu部分的问题</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-category-1"><p>出於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
+<div class="tabs" id="sub-sub-category"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-category-1">Ubuntu部分的问题</a></li><li class="tab"><a href="#sub-sub-category-2">Cargo部分的问题</a></li><li class="tab"><a href="#sub-sub-category-3">Qemu部分的问题</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-category-1"><p>出於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
 <p>因爲官方提供的Docker的基礎鏡像是<code>Ubuntu:20.04</code>，如果使用默認的官方鏡像，則在網絡不好的情況下，<code>apt-get</code>這個速度會十分緩慢，因此需要對基礎的<code>Ubuntu:20.04</code>鏡像做一些修改：</p>
 <p>首先，測試了一下，基礎的<code>Ubuntu:20.04</code>中存在<code>sed</code>命令，可以通過這個命令，修改<code>/etc/apt/sources.list</code>中的鏡像源的列表，爲了簡化操作的複雜度，我添加了一些文件為基礎的文件</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mkdir docker</span></span><br><span class="line"><span class="comment"># thouch registryList</span></span><br><span class="line">(root of pj)/docker/registryList</span><br></pre></td></tr></table></figure>
