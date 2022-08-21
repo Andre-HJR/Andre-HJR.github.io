@@ -27,39 +27,47 @@
       </tags>
   </entry>
   <entry>
-    <title>淺談一下 SmartPtr</title>
-    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
-    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
-<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+    <title>Python中簡單的網絡編程</title>
+    <url>/2022/08/22/code/python/net/</url>
+    <content><![CDATA[<p>Python中簡單的網絡編程</p>
+<div class="note info no-icon"><p>十分重要的是， Python的吞吐其實并不優秀。但是Python是一個十分重要工具語言，它可以做到的是可以簡化測試編程的壓力。</p>
+</div>
 <span id="more"></span>
+<details class="note warning no-icon"><summary><p>需要注意的點</p>
+</summary>
+<div class="tabs" id="warntabs"><ul class="nav-tabs"><li class="tab active"><a href="#warntabs-1">問題</a></li><li class="tab"><a href="#warntabs-2">一些Features</a></li></ul><div class="tab-content"><div class="tab-pane active" id="warntabs-1"><ul>
+<li>比較困難的是 TCP 如果是在自己的機器上測試TCP，可能不太容易模擬多個不同的客戶端</li>
+</ul></div><div class="tab-pane" id="warntabs-2"></div></div></div>
+</details>
 
+<h1 id="Server-相關的代碼"><a href="#Server-相關的代碼" class="headerlink" title="Server 相關的代碼"></a>Server 相關的代碼</h1><details class="note info no-icon"><summary><p>server的參考代碼</p>
+</summary>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ --- tcp 服务端程序 server.py ---</span></span><br><span class="line"><span class="comment">#\ 导入 socket 库</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 主机地址，表示绑定本机所有网络接口ip地址</span></span><br><span class="line"><span class="comment">#\ 等待客户端连接</span></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line"><span class="comment">#\ 端口号</span></span><br><span class="line">PORT = <span class="number">5000</span></span><br><span class="line"><span class="comment">#\ 定义一次从socket缓冲区最多读入512个字节数据，可自定义</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象</span></span><br><span class="line"><span class="comment">#\ 参数AF_INET表示该socket网络层使用IP协议</span></span><br><span class="line"><span class="comment">#\ 参数SOCK_STREAM表示该socket传输层使用tcp协议</span></span><br><span class="line">listenSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ socket绑定地址和端口</span></span><br><span class="line">listenSocket.bind((IP, PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 使socket处于监听状态，等待客户端的连接请求</span></span><br><span class="line"><span class="comment">#\ 参数5表示， 最多接5个等待连接的客户端，可自定义</span></span><br><span class="line">listenSocket.listen(<span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;服务器启动成功，在<span class="subst">&#123;PORT&#125;</span>端口等待客户端连接...&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dataSocket, addr = listenSocket.accept()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;接受一个客户端连接：&#x27;</span>, addr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 尝试读取对方发送的信息</span></span><br><span class="line">    <span class="comment">#\ BUFLEN 指定从接收缓冲里最多读取多少字节</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 如果返回空bytes, 表示对方关闭了连接</span></span><br><span class="line">    <span class="comment">#\ 退出循环，结束消息收发</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 读取的字节数据是bytes类型，需要解码为字符串</span></span><br><span class="line">    info = recved.decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;收到对方信息：<span class="subst">&#123;info&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 发送的数据类型必须是bytes,所以要编码</span></span><br><span class="line">    dataSocket.send(<span class="string">f&#x27;服务端接收到了信息<span class="subst">&#123;info&#125;</span>&#x27;</span>.encode())</span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"><span class="comment">#\ listenSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+</details>
 
-<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
-<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="Client-相關的代碼"><a href="#Client-相關的代碼" class="headerlink" title="Client 相關的代碼"></a>Client 相關的代碼</h1><details class="note info no-icon"><summary><p>client的參考代碼</p>
+</summary>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\  --- tcp 客户端程序 client.py ---</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">SERVER_PORT = <span class="number">5000</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象，指明协议</span></span><br><span class="line">dataSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 连接服务器socket</span></span><br><span class="line">dataSocket.connect((IP, SERVER_PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 以下部分传入数据的格式仅供参考，这里示范传入字符串</span></span><br><span class="line"><span class="comment">#\ k但是客户端和服务端之间的交流为字节码，需要字符串与字节码的转化</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 从终端读入用户输入的字符串（可自定义是否为字符串）</span></span><br><span class="line">    toSend = <span class="built_in">input</span>(<span class="string">&#x27;&gt;&gt; &#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> toSend == <span class="string">&#x27;exit&#x27;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 发送信息，也要编码为 byes</span></span><br><span class="line">    dataSocket.send(toSend.encode())</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 等待接收服务段的消息</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line">    <span class="comment">#\ 如果返回空bytes，表示对方关闭了连接</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 打印读取的信息</span></span><br><span class="line">    <span class="built_in">print</span>(recved.decode())</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
-<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
+</details>]]></content>
       <categories>
-        <category>cpp</category>
-        <category>loki</category>
+        <category>python</category>
+        <category>network</category>
       </categories>
       <tags>
-        <tag>loki</tag>
+        <tag>network</tag>
       </tags>
   </entry>
   <entry>
-    <title>參營日常</title>
+    <title>參營日常 - OSCamp2022</title>
     <url>/2022/07/06/os/camp/note/</url>
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
 <span id="more"></span>
 
-<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="主要的任务"><a href="#主要的任务" class="headerlink" title="主要的任务"></a>主要的任务</h2><h3 id="Step-0-Rustlings"><a href="#Step-0-Rustlings" class="headerlink" title="Step - 0: Rustlings"></a>Step - 0: Rustlings</h3><div class="tabs" id="rustlings"><ul class="nav-tabs"><li class="tab active"><a href="#rustlings-1">问题列表</a></li><li class="tab"><a href="#rustlings-2">Rustlings 问题汇总</a></li><li class="tab"><a href="#rustlings-3">Rust的总结</a></li></ul><div class="tab-content"><div class="tab-pane active" id="rustlings-1"><p><strong>Problem List</strong></p>
+<h1 id="第一階段的學習記錄"><a href="#第一階段的學習記錄" class="headerlink" title="第一階段的學習記錄"></a>第一階段的學習記錄</h1><h2 id="主要的任务"><a href="#主要的任务" class="headerlink" title="主要的任务"></a>主要的任务</h2><h3 id="Step-0-Rustlings"><a href="#Step-0-Rustlings" class="headerlink" title="Step - 0: Rustlings"></a>Step - 0: Rustlings</h3><details class="note primary"><summary><p>十分重要的Rustlings</p>
+</summary>
+<div class="tabs" id="rustlings"><ul class="nav-tabs"><li class="tab active"><a href="#rustlings-1">问题列表</a></li><li class="tab"><a href="#rustlings-2">Rustlings 问题汇总</a></li><li class="tab"><a href="#rustlings-3">Rust的总结</a></li></ul><div class="tab-content"><div class="tab-pane active" id="rustlings-1"><p><strong>Problem List</strong></p>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> advanced_errors [2]</li>
 <li><input checked="" disabled="" type="checkbox"> clippy [2]</li>
@@ -313,8 +321,12 @@
 </details></div><div class="tab-pane" id="rslq-3"><p><strong>This is Sub Tab 3.</strong></p>
 <div class="tabs" id="sub-sub-tabs"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-tabs-1">Sub-Sub Tabs 1</a></li><li class="tab"><a href="#sub-sub-tabs-2">Sub-Sub Tabs 2</a></li><li class="tab"><a href="#sub-sub-tabs-3">Sub-Sub Tabs 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-tabs-1"><p><strong>This is Sub-Sub Tab 1 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-2"><p><strong>This is Sub-Sub Tab 2 of Sub Tab 3.</strong></p></div><div class="tab-pane" id="sub-sub-tabs-3"><p><strong>This is Sub-Sub Tab 3 of Sub Tab 3.</strong></p></div></div></div></div></div></div></div><div class="tab-pane" id="rustlings-3"><p><strong>Rust</strong>，我觉得还是对 <strong>C++<strong>语言地位的一种挑战，本质上还是一种 <strong>C++<strong>的<code>--</code>操作。其实C++中的</strong>Move</strong>也是可以完成相应的权限的思想的。但是</strong>Rust</strong>的设计实在是太巧妙了，它将内存操作的粒度变小了，引入所有权的概念，减少<strong>C++<strong>在设计大型项目时，处理内存的</strong>Allocator</strong>，我觉得<strong>Allocator</strong>是面向对象的遗留，而事实不止一次向程序员强调面向对象是不太合理的，至少在内存处理这个方向。记得<code>STLport</code>提供了一个近乎完美的<code>Allocator Pool</code>但是，即使是那样，内存的碎片化仍然是无法避免的。而所有权的引入使得内存操作可以拥有更细的粒度，但又不会让人觉得像处理指针那样复杂，我觉得这是编程语言的一个很大的进步。</p></div></div></div>
 
+</details>
 
-<h3 id="Step-2-Labs"><a href="#Step-2-Labs" class="headerlink" title="Step - 2: Labs"></a>Step - 2: Labs</h3><p>时间还是紧张了些，Lab的实验报告，并没有全部完成，当自己的工作逐渐稳定后会补齐相应的实验记录。</p>
+
+<h3 id="Step-2-Labs"><a href="#Step-2-Labs" class="headerlink" title="Step - 2: Labs"></a>Step - 2: Labs</h3><details class="note primary"><summary><p>Lab主要的實驗報告</p>
+</summary>
+<p>时间还是紧张了些，Lab的实验报告，并没有全部完成，当自己的工作逐渐稳定后会补齐相应的实验记录。</p>
 <div class="tabs" id="lab"><ul class="nav-tabs"><li class="tab active"><a href="#lab-1">Lab0-0</a></li><li class="tab"><a href="#lab-2">Lab0-1</a></li><li class="tab"><a href="#lab-3">Lab1</a></li><li class="tab"><a href="#lab-4">Lab2</a></li><li class="tab"><a href="#lab-5">Lab3</a></li><li class="tab"><a href="#lab-6">Lab4</a></li><li class="tab"><a href="#lab-7">Lab5</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab-1"><div class="tabs" id="lab00"><ul class="nav-tabs"><li class="tab active"><a href="#lab00-1">实验描述</a></li><li class="tab"><a href="#lab00-2">实验问题</a></li><li class="tab"><a href="#lab00-3">实验报告</a></li><li class="tab"><a href="#lab00-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab00-1"><p><strong>从一个简单的HelloWorld开始</strong></p>
 <p>让 Hello, world! 程序脱离其依赖的执行环境， 编写一个能打印 Hello, world! 的 OS。这趟旅途将让我们对应用程序及其执行环境有更深入的理解。</p>
 <p>为便于测试，完成编程实验时，请以框架代码为基础，不必跟着文档从零开始编写内核。</p>
@@ -387,7 +399,7 @@
 <p>通过，反汇编分析工具，我们可以得到（以下参数来自实验指导书）,可以看出两条指令就是一个死循环，这样程序就已经是合理的了。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">0000000000011120 &lt;_start&gt;:</span><br><span class="line">;     loop &#123;&#125;</span><br><span class="line">    11120: 09 a0            j       2 &lt;_start+0x2&gt;</span><br><span class="line">    11122: 01 a0            j       0 &lt;_start+0x2&gt;</span><br></pre></td></tr></table></figure>
 
-<p>既然有了开始，那么总是需要能够有个结束的， 当我们把<code>_start()</code>中的<code>loop{}</code>语句注释之后，通过反汇编， 可以得到</p>
+<p>既然有了开始，那么总是需要能够有个结束的， 当我们把<code>_start()</code>中的<code>loop&#123;&#125;</code>语句注释之后，通过反汇编， 可以得到</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">0000000000011120 &lt;_start&gt;:</span><br><span class="line"> ; &#125;</span><br><span class="line">   11120: 82 80              ret</span><br></pre></td></tr></table></figure>
 
 <p>虽然这样看起来是一个合法的程序，但是当通过<code>qemu</code>执行程序的时候，则会出现段错误，具体如下</p>
@@ -448,7 +460,7 @@
 
 <p>应用程序访问操作系统提供的系统调用的指令是<code>ecall</code>，操作系统访问<code>RustSBI</code>提供的<code>SBI</code>调用的指令也是<code>ecall</code>， 虽然指令一样，但它们所在的特权级是不一样的。 简单地说，应用程序位于最弱的用户特权级（<code>User Mode</code>）， 操作系统位于内核特权级（<code>Supervisor Mode</code>），<code>RustSBI</code>位于机器特权级（<code>Machine Mode</code>）。 </p>
 <p><em>编译执行，结果如下</em></p>
-<div class="note info no-icon"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 编译生成ELF格式的执行文件</span></span><br><span class="line">&gt; cargo build --release</span><br><span class="line"> Compiling os v0.1.0 (/media/chyyuu/ca8c7ba6-51b7-41fc-8430-e29e31e5328f/thecode/rust/os_kernel_lab/os)</span><br><span class="line">  Finished release [optimized] target(s) <span class="keyword">in</span> 0.15s</span><br><span class="line"><span class="comment"># 把ELF执行文件转成bianary文件</span></span><br><span class="line">&gt; rust-objcopy --binary-architecture=riscv64 target/riscv64gc-unknown-none-elf/release/os --strip-all -O binary target/riscv64gc-unknown-none-elf/release/os.bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载运行</span></span><br><span class="line">&gt; qemu-system-riscv64 -machine virt -nographic -bios ../bootloader/rustsbi-qemu.bin -device loader,file=target/riscv64gc-unknown-none-elf/release/os.bin,addr=0x80200000</span><br><span class="line"><span class="comment"># 无法退出，风扇狂转，感觉碰到死循环</span></span><br></pre></td></tr></table></figure>
+<div class="note info no-icon"><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ 编译生成ELF格式的执行文件</span></span><br><span class="line">&gt; cargo build --release</span><br><span class="line"> Compiling os v0.1.0 (/media/chyyuu/ca8c7ba6-51b7-41fc-8430-e29e31e5328f/thecode/rust/os_kernel_lab/os)</span><br><span class="line">  Finished release [optimized] target(s) <span class="keyword">in</span> 0.15s</span><br><span class="line"><span class="comment">#\ 把ELF执行文件转成bianary文件</span></span><br><span class="line">&gt; rust-objcopy --binary-architecture=riscv64 target/riscv64gc-unknown-none-elf/release/os --strip-all -O binary target/riscv64gc-unknown-none-elf/release/os.bin</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 加载运行</span></span><br><span class="line">&gt; qemu-system-riscv64 -machine virt -nographic -bios ../bootloader/rustsbi-qemu.bin -device loader,file=target/riscv64gc-unknown-none-elf/release/os.bin,addr=0x80200000</span><br><span class="line"><span class="comment">#\ 无法退出，风扇狂转，感觉碰到死循环</span></span><br></pre></td></tr></table></figure>
 </div>
 
 <p>问题在哪？通过<code>rust-readobj</code>分析<code>os</code>可执行程序，发现其入口地址不是<code>RustSBI</code>约定的<code>0x80200000</code>。我们需要修改程序的内存布局并设置好栈空间。</p>
@@ -487,7 +499,15 @@
 <p>我们还使用第三方库 <code>log</code> 为你实现了日志模块，相关代码位于 <code>os/src/logging.rs</code> 中。</p></div><div class="tab-pane" id="lab00-4"><div class="note info no-icon"><p>个人觉得，CI的这种策略真的是不错，很有自动化的味道，所有检测所需的动作，可以以<code>config</code>的方式完整的确认下来，真的是一个不错的体验。</p>
 </div></div></div></div></div><div class="tab-pane" id="lab-2"><div class="tabs" id="01"><ul class="nav-tabs"><li class="tab active"><a href="#01-1">实验描述</a></li><li class="tab"><a href="#01-2">实验问题</a></li><li class="tab"><a href="#01-3">实验报告</a></li><li class="tab"><a href="#01-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="01-1"></div><div class="tab-pane" id="01-2"></div><div class="tab-pane" id="01-3"></div><div class="tab-pane" id="01-4"></div></div></div></div><div class="tab-pane" id="lab-3"><div class="tabs" id="lab_1"><ul class="nav-tabs"><li class="tab active"><a href="#lab_1-1">实验描述</a></li><li class="tab"><a href="#lab_1-2">实验问题</a></li><li class="tab"><a href="#lab_1-3">实验报告</a></li><li class="tab"><a href="#lab_1-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_1-1"></div><div class="tab-pane" id="lab_1-2"></div><div class="tab-pane" id="lab_1-3"></div><div class="tab-pane" id="lab_1-4"></div></div></div></div><div class="tab-pane" id="lab-4"><div class="tabs" id="lab_2"><ul class="nav-tabs"><li class="tab active"><a href="#lab_2-1">实验描述</a></li><li class="tab"><a href="#lab_2-2">实验问题</a></li><li class="tab"><a href="#lab_2-3">实验报告</a></li><li class="tab"><a href="#lab_2-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_2-1"></div><div class="tab-pane" id="lab_2-2"></div><div class="tab-pane" id="lab_2-3"></div><div class="tab-pane" id="lab_2-4"></div></div></div></div><div class="tab-pane" id="lab-5"><div class="tabs" id="lab_3"><ul class="nav-tabs"><li class="tab active"><a href="#lab_3-1">实验描述</a></li><li class="tab"><a href="#lab_3-2">实验问题</a></li><li class="tab"><a href="#lab_3-3">实验报告</a></li><li class="tab"><a href="#lab_3-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_3-1"></div><div class="tab-pane" id="lab_3-2"></div><div class="tab-pane" id="lab_3-3"></div><div class="tab-pane" id="lab_3-4"></div></div></div></div><div class="tab-pane" id="lab-6"><div class="tabs" id="lab_4"><ul class="nav-tabs"><li class="tab active"><a href="#lab_4-1">实验描述</a></li><li class="tab"><a href="#lab_4-2">实验问题</a></li><li class="tab"><a href="#lab_4-3">实验报告</a></li><li class="tab"><a href="#lab_4-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_4-1"></div><div class="tab-pane" id="lab_4-2"></div><div class="tab-pane" id="lab_4-3"></div><div class="tab-pane" id="lab_4-4"></div></div></div></div><div class="tab-pane" id="lab-7"><div class="tabs" id="lab_5"><ul class="nav-tabs"><li class="tab active"><a href="#lab_5-1">实验描述</a></li><li class="tab"><a href="#lab_5-2">实验问题</a></li><li class="tab"><a href="#lab_5-3">实验报告</a></li><li class="tab"><a href="#lab_5-4">实验体会</a></li></ul><div class="tab-content"><div class="tab-pane active" id="lab_5-1"></div><div class="tab-pane" id="lab_5-2"></div><div class="tab-pane" id="lab_5-3"></div><div class="tab-pane" id="lab_5-4"></div></div></div></div></div></div>
 
-<h2 id="日記部分（始于-2022年7月6日）"><a href="#日記部分（始于-2022年7月6日）" class="headerlink" title="日記部分（始于 2022年7月6日）"></a>日記部分（始于 2022年7月6日）</h2><h3 id="2022-7-5"><a href="#2022-7-5" class="headerlink" title="2022-7-5"></a>2022-7-5</h3><p><strong>主要完成了 rustlings 的部分練習</strong></p>
+</details>
+
+<h2 id="第一階段的工作日記"><a href="#第一階段的工作日記" class="headerlink" title="第一階段的工作日記"></a>第一階段的工作日記</h2><p>（始于 2022年7月6日）</p>
+<details class="note primary"><summary><p>工作日記</p>
+</summary>
+<ul>
+<li>2022-7-5</li>
+</ul>
+<p><strong>主要完成了 rustlings 的部分練習</strong></p>
 <table>
 <thead>
 <tr>
@@ -525,132 +545,93 @@
 <blockquote>
 <p>Github 的 codespace 好像不是很穩定，或者説好像并發情況下表現不是很好</p>
 </blockquote>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-6"><a href="#2022-7-6" class="headerlink" title="2022-7-6"></a>2022-7-6</h3><p>主要就是改善一下<code>Dockerfile</code>的相關配置，<code>fork</code>了官方的template, 並提交了<code>pull request</code>。</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-7"><a href="#2022-7-7" class="headerlink" title="2022-7-7"></a>2022-7-7</h3><p>提交 Lab0-0 开始 Lab0-1</p>
+<ul>
+<li>2022-7-6</li>
+</ul>
+<p>主要就是改善一下<code>Dockerfile</code>的相關配置，<code>fork</code>了官方的template, 並提交了<code>pull request</code>。</p>
+<ul>
+<li>2022-7-7</li>
+</ul>
+<p>提交 Lab0-0 开始 Lab0-1</p>
 <blockquote>
 <p>主要困在了 <code>cl</code>的部分，没事后面解决了</p>
 </blockquote>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-8"><a href="#2022-7-8" class="headerlink" title="2022-7-8"></a>2022-7-8</h3><p>开始 Lab0-1, 整理了一下自己的博客布局</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-9"><a href="#2022-7-9" class="headerlink" title="2022-7-9"></a>2022-7-9</h3><p>完成rustlings</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-10"><a href="#2022-7-10" class="headerlink" title="2022-7-10"></a>2022-7-10</h3><p>学习 RISC-V， 整理rustlings, </p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-11"><a href="#2022-7-11" class="headerlink" title="2022-7-11"></a>2022-7-11</h3><p>完成Lab，学习RISC-V，整理rustlings, </p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-12"><a href="#2022-7-12" class="headerlink" title="2022-7-12"></a>2022-7-12</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-13"><a href="#2022-7-13" class="headerlink" title="2022-7-13"></a>2022-7-13</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-14"><a href="#2022-7-14" class="headerlink" title="2022-7-14"></a>2022-7-14</h3><p>学习RISC-V，整理rustlings, 和Lab</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-15"><a href="#2022-7-15" class="headerlink" title="2022-7-15"></a>2022-7-15</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-16"><a href="#2022-7-16" class="headerlink" title="2022-7-16"></a>2022-7-16</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-17"><a href="#2022-7-17" class="headerlink" title="2022-7-17"></a>2022-7-17</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-18"><a href="#2022-7-18" class="headerlink" title="2022-7-18"></a>2022-7-18</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-19"><a href="#2022-7-19" class="headerlink" title="2022-7-19"></a>2022-7-19</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<h3 id="2022-7-20"><a href="#2022-7-20" class="headerlink" title="2022-7-20"></a>2022-7-20</h3><p>做一些和整理有关的工作</p>
-<div style="
-padding: 2px;
-background: azure;
-"
-></div>
-
-<hr>
-<h1 id="Rust-的相關筆記"><a href="#Rust-的相關筆記" class="headerlink" title="Rust 的相關筆記"></a>Rust 的相關筆記</h1><hr>
-<h1 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h1><h2 id="一些常见的指令"><a href="#一些常见的指令" class="headerlink" title="一些常见的指令"></a>一些常见的指令</h2><details class="note info no-icon"><summary><p>RISC-V和C</p>
-</summary>
-<p>一个C -&gt; RISC-V 的Demo</p>
-<figure class="highlight c"><figcaption><span>Ccode</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> <span class="title function_">fact</span> <span class="params">(<span class="type">long</span> <span class="type">long</span> <span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ( n &lt; <span class="number">1</span> ) <span class="keyword">return</span> (<span class="number">1</span>);</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">return</span> (n * fact(n - <span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight as"><figcaption><span>Ascode</span></figcaption><table><tr><td class="code"><pre><span class="line">fact:</span><br><span class="line">	addi sp, sp, <span class="number">-16</span> <span class="comment">// ! adjust stack for 2 items</span></span><br><span class="line">	sd   xl, <span class="number">8</span>(sp)	 <span class="comment">// save the return address</span></span><br><span class="line">	sd   x10, <span class="number">0</span>(sp)  <span class="comment">// save the argument n</span></span><br><span class="line"><span class="comment">// ! 第一次調用fact時，sd保存程序中</span></span><br><span class="line"><span class="comment">// ! fact的地址。下面兩條指令測試</span></span><br><span class="line">addi x5, x10, <span class="number">-1</span> <span class="comment">// x5 = n - 1</span></span><br><span class="line">bge  x5, x0, L1  <span class="comment">// if (n - 1) &gt;= 0, go to L1</span></span><br><span class="line"><span class="comment">// ! 如果n小于1，fact将1放入一个值寄存器中</span></span><br><span class="line"><span class="comment">// ! 以返回1：它将1加0并加入`x10`中。</span></span><br><span class="line"><span class="comment">// ! 然后从栈中弹出两个已保存的值并</span></span><br><span class="line"><span class="comment">// ! 跳转到返回地址：</span></span><br><span class="line">addi  x10, x0, <span class="number">1</span> <span class="comment">// return 1</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// pop 2 items off stack</span></span><br><span class="line">jalr  x0, <span class="number">0</span>(x1)  <span class="comment">// return to caller</span></span><br><span class="line"><span class="comment">// ! 从栈中弹出两项之前，可以加载`x1`和`x10`。</span></span><br><span class="line"><span class="comment">// ! 因为当n小于1时`x1`和`x10`不会改变,</span></span><br><span class="line"><span class="comment">// ! 所以跳过这些指令。</span></span><br><span class="line"><span class="comment">// !   如果n不小于1，则参数n递减，</span></span><br><span class="line"><span class="comment">// ! 然后用递减后的值再次调用fact</span></span><br><span class="line">L1:</span><br><span class="line">	addi x10, x10, <span class="number">-1</span> <span class="comment">// n &gt;= 1: argument gets (n - 1)</span></span><br><span class="line">	jal  x1, fact</span><br><span class="line"><span class="comment">// ! 下一条指令是fact的返回位置，</span></span><br><span class="line"><span class="comment">// ! 其结果在`x10`中。现在旧的返回地址</span></span><br><span class="line"><span class="comment">// ! 和旧的参数与栈指针一起被恢复</span></span><br><span class="line">addi  x6, x10, <span class="number">0</span> <span class="comment">// return from jal: move result of fact</span></span><br><span class="line">ld    x10, <span class="number">0</span>(sp) <span class="comment">// restore argument n</span></span><br><span class="line">ld    x1, <span class="number">8</span>(sp)  <span class="comment">// restore the return address</span></span><br><span class="line">addi  sp, sp, <span class="number">16</span> <span class="comment">// adjust stack pointer to pop 2 items</span></span><br><span class="line"><span class="comment">// ! 接下来，参数寄存器 `x10`得到旧参数</span></span><br><span class="line"><span class="comment">// ! 与`fact(n - 1)`结果的乘积，目前在`x6`中。假设有一个乘法指令</span></span><br><span class="line">mul  x10, x10, x6 <span class="comment">// return n * fact(n - 1)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>2022-7-8</li>
+</ul>
+<p>开始 Lab0-1, 整理了一下自己的博客布局</p>
+<ul>
+<li>2022-7-9</li>
+</ul>
+<p>完成rustlings</p>
+<ul>
+<li>2022-7-10</li>
+</ul>
+<p>学习 RISC-V， 整理rustlings, </p>
+<ul>
+<li>2022-7-11</li>
+</ul>
+<p>完成Lab，学习RISC-V，整理rustlings, </p>
+<ul>
+<li>2022-7-12</li>
+</ul>
+<p>学习RISC-V，整理rustlings, 和Lab</p>
+<ul>
+<li>2022-7-13</li>
+</ul>
+<p>学习RISC-V，整理rustlings, 和Lab</p>
+<ul>
+<li>2022-7-14</li>
+</ul>
+<p>学习RISC-V，整理rustlings, 和Lab</p>
+<ul>
+<li>2022-7-15</li>
+</ul>
+<p>做一些和整理有关的工作</p>
+<ul>
+<li>2022-7-16</li>
+</ul>
+<p>做一些和整理有关的工作</p>
+<ul>
+<li>2022-7-17</li>
+</ul>
+<p>做一些和整理有关的工作</p>
+<ul>
+<li>2022-7-18</li>
+</ul>
+<p>做一些和整理有关的工作</p>
+<ul>
+<li>2022-7-19</li>
+</ul>
+<p>做一些和整理有关的工作</p>
+<ul>
+<li>2022-7-20</li>
+</ul>
+<p>做一些和整理有关的工作</p>
 
 </details>
 
 <hr>
+<h2 id="Rust-的相關筆記"><a href="#Rust-的相關筆記" class="headerlink" title="Rust 的相關筆記"></a>Rust 的相關筆記</h2><hr>
+<h2 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h2><hr>
+<h1 id="第二階段的學習記錄"><a href="#第二階段的學習記錄" class="headerlink" title="第二階段的學習記錄"></a>第二階段的學習記錄</h1><details class="note default"><summary><p>第二階段的一些記錄</p>
+</summary>
+<div class="tabs" id="secondrecordtags"><ul class="nav-tabs"><li class="tab active"><a href="#secondrecordtags-1">心得</a></li></ul><div class="tab-content"><div class="tab-pane active" id="secondrecordtags-1"><ol>
+<li>關於任務和實習</li>
+</ol></div></div></div>
+
+</details>
+
+
+<h2 id="第二階段的工作日記"><a href="#第二階段的工作日記" class="headerlink" title="第二階段的工作日記"></a>第二階段的工作日記</h2><details class="note primary"><summary><p>工作日記</p>
+</summary>
+<p>2022年8月01日 ~ 2022年8月21日 : 工作進度幾乎為零， 主要是實習總是和訓練營的工作產生了比較嚴重的衝突</p>
+<ul>
+<li>2022年8月22日</li>
+</ul>
+
+</details>
+
 <h1 id="一些技術上的問題"><a href="#一些技術上的問題" class="headerlink" title="一些技術上的問題"></a>一些技術上的問題</h1><div class="tabs" id="question"><ul class="nav-tabs"><li class="tab active"><a href="#question-1">实验环境的问题</a></li><li class="tab"><a href="#question-2">测试的一些建议</a></li><li class="tab"><a href="#question-3">Question 3</a></li></ul><div class="tab-content"><div class="tab-pane active" id="question-1"><p><strong>实验环境产生的问题</strong></p>
 <div class="note default"><p>因为个人使用Docker部署实验环境， 这一部分是总结实验环境产生的一些问题，并尝试给出一些解决方案</p>
 </div>
@@ -658,23 +639,23 @@ background: azure;
 <div class="tabs" id="sub-sub-category"><ul class="nav-tabs"><li class="tab active"><a href="#sub-sub-category-1">Ubuntu部分的问题</a></li><li class="tab"><a href="#sub-sub-category-2">Cargo部分的问题</a></li><li class="tab"><a href="#sub-sub-category-3">Qemu部分的问题</a></li></ul><div class="tab-content"><div class="tab-pane active" id="sub-sub-category-1"><p>出於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
 <p>因爲官方提供的Docker的基礎鏡像是<code>Ubuntu:20.04</code>，如果使用默認的官方鏡像，則在網絡不好的情況下，<code>apt-get</code>這個速度會十分緩慢，因此需要對基礎的<code>Ubuntu:20.04</code>鏡像做一些修改：</p>
 <p>首先，測試了一下，基礎的<code>Ubuntu:20.04</code>中存在<code>sed</code>命令，可以通過這個命令，修改<code>/etc/apt/sources.list</code>中的鏡像源的列表，爲了簡化操作的複雜度，我添加了一些文件為基礎的文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mkdir docker</span></span><br><span class="line"><span class="comment"># thouch registryList</span></span><br><span class="line">(root of pj)/docker/registryList</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ mkdir docker</span></span><br><span class="line"><span class="comment">#\ thouch registryList</span></span><br><span class="line">(root of pj)/docker/registryList</span><br></pre></td></tr></table></figure>
 
 <p>在<code>registryList</code>中輸入相應的<code>Ubuntu 20.04</code>的相關鏡像源。</p>
 <p>爲了能在<code>make build_docker</code>中使得自己的鏡像可以生效，需要對根目錄下的<code>Dockerfile</code>進行些許修改:</p>
-<figure class="highlight plaintext"><figcaption><span>Dockerfile</span><a href="https://github.com/Andre-HJR/rust-based-os-comp2022/blob/3388dcc008b6efe897c17381d1b917245b18d719/Dockerfile#L12">Dockerfile</a></figcaption><table><tr><td class="code"><pre><span class="line"># -1. (Optional) Add Ubuntu Repo</span><br><span class="line">ADD docker/registryList /etc/apt/</span><br><span class="line">RUN sed -i &quot;1r /etc/apt/registryList&quot; /etc/apt/sources.list</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="sub-sub-category-2"><p>出於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
+<figure class="highlight plaintext"><figcaption><span>Dockerfile</span><a href="https://github.com/Andre-HJR/rust-based-os-comp2022/blob/3388dcc008b6efe897c17381d1b917245b18d719/Dockerfile#L12">Dockerfile</a></figcaption><table><tr><td class="code"><pre><span class="line">#\ -1. (Optional) Add Ubuntu Repo</span><br><span class="line">ADD docker/registryList /etc/apt/</span><br><span class="line">RUN sed -i &quot;1r /etc/apt/registryList&quot; /etc/apt/sources.list</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="sub-sub-category-2"><p>出於對操作複雜度的考慮，個人考慮使用<code>Docker</code>進行實驗環境的部署，從官方的文檔來看，只需要兩個命令<code>make build_docker</code>和<code>make docker</code>就可以完成實驗的部署。</p>
 <p>因爲官方提供的Dockerfile，其中<code>Cargo</code>并没有修改为国内的源，如果使用默認的官方鏡像，則在網絡不好的情況下，<code>cargo install</code>這個速度會十分緩慢，因此需要對基礎的<code>cargo</code>鏡像做一些修改：</p>
 <p>首先，測試了一下，基礎的<code>Ubuntu:20.04</code>中存在<code>sed</code>命令，可以通過這個命令，修改<code>/root/.cargo/config</code>中的鏡像源的列表，爲了簡化操作的複雜度，我同样添加了一些文件為基礎的文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mkdir cargo</span></span><br><span class="line"><span class="comment"># thouch config</span></span><br><span class="line">(root of pj)/cargo/config</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ mkdir cargo</span></span><br><span class="line"><span class="comment">#\ thouch config</span></span><br><span class="line">(root of pj)/cargo/config</span><br></pre></td></tr></table></figure>
 
 <p>在<code>config</code>中輸入相應的<code>cargo</code>的相關鏡像源。</p>
 <p>爲了能在<code>make build_docker</code>中使得自己的鏡像可以生效，需要對根目錄下的<code>Dockerfile</code>進行些許修改:</p>
-<figure class="highlight plaintext"><figcaption><span>Dockerfile</span></figcaption><table><tr><td class="code"><pre><span class="line"># -1.1. (Optional) Add cargo Repo</span><br><span class="line">ADD cargo/config /root/.cargo/</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="sub-sub-category-3"><div class="note info no-icon"><p>其实，这主要是系统构建（<code>make build_docker</code>）的时候产生的问题，准确来说，这可能并不是问题，只是一个优化罢了。</p>
+<figure class="highlight plaintext"><figcaption><span>Dockerfile</span></figcaption><table><tr><td class="code"><pre><span class="line">#\ -1.1. (Optional) Add cargo Repo</span><br><span class="line">ADD cargo/config /root/.cargo/</span><br></pre></td></tr></table></figure></div><div class="tab-pane" id="sub-sub-category-3"><div class="note info no-icon"><p>其实，这主要是系统构建（<code>make build_docker</code>）的时候产生的问题，准确来说，这可能并不是问题，只是一个优化罢了。</p>
 </div>
 
 <p>主要是由于每次在系统构建的时候，镜像总是要从qemu的官网上下载，可能是由于国外的原因， 这个<code>*.tar.xz</code>的压缩包，下载的特别慢，后来我用迅雷下了一下，只需要1分钟不到就全部下载到本地了，压缩包也就2MB大小左右，为了能快一点构建镜像，我觉得可以把压缩包直接放在仓库中，直接解压在镜像里，这样可不更快吗（后面我试着重新构建了一下，确实是这样的）？</p>
 <p>于是便有了如下操作：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mkdir qemu</span></span><br><span class="line"><span class="comment"># move the *.tar.xz to qemu</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ mkdir qemu</span></span><br><span class="line"><span class="comment">#\ move the *.tar.xz to qemu</span></span><br></pre></td></tr></table></figure>
 
 <p>通过<code>ADD</code>将压缩包，加入<code>qemu</code>中，</p>
 <figure class="highlight plaintext"><figcaption><span>Dockerfile</span></figcaption><table><tr><td class="code"><pre><span class="line">ADD qemu/qemu-7.0.0.tar.xz /root/</span><br></pre></td></tr></table></figure>
@@ -721,7 +702,7 @@ background: azure;
 <p>传递给<code>test_runner</code>函数的<code>tests</code>切片里包含了一个<code>trivial_assertion</code>函数的引用，从屏幕上输出的<code>trivial assertion... [ok]</code>信息可见，我们的测试已被调用并且顺利通过。</p>
 <p>在执行完<code>tests</code>后，<code>test_runner</code>会将结果返回给<code>test_main</code>函数，而这个函数又返回到 <code>_start</code>入口点函数——这样我们就进入了一个死循环，因为入口点函数是不允许返回的。这将导致一个问题：我们希望<code>cargo xtest</code>在所有的测试运行完毕后，才返回并退出。</p></div><div class="tab-pane" id="rtest-2"><p>现在我们在<code>_start</code>函数结束后进入了一个死循环，所以每次执行完<code>cargo xtest</code>后我们都需要手动去关闭<code>QEMU</code>；但是我们还想在没有用户交互的脚本环境下执行<code>cargo xtest</code>。解决这个问题的最佳方式，是实现一个合适的方法来关闭我们的操作系统——不幸的是，这个方式实现起来相对有些复杂，因为这要求我们实现对<code>APM</code>或<code>ACPI</code>电源管理标准的支持。</p>
 <p>幸运的是，还有一个绕开这些问题的办法：<code>QEMU</code>支持一种名为<code>isa-debug-exit</code>的特殊设备，它提供了一种从客户系统（guest system）里退出QEMU的简单方式。为了使用这个设备，我们需要向QEMU传递一个<code>-device</code>参数。当然，我们也可以通过将<code>package.metadata.bootimage.test-args</code>配置关键字添加到我们的<code>Cargo.toml</code>来达到目的：</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [<span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [<span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>]</span><br></pre></td></tr></table></figure>
 
 <p><code>bootimage runner</code>会在QEMU的默认测试命令后添加<code>test-args</code>参数。（对于<code>cargo xrun</code>命令，这个参数会被忽略。）</p>
 <p>在传递设备名 (<code>isa-debug-exit</code>)的同时，我们还传递了两个参数，<code>iobase</code> 和 <code>iosize</code> 。这两个参数指定了一个<code>I/O 端口</code>，我们的内核将通过它来访问设备。</p>
@@ -732,7 +713,7 @@ background: azure;
 <p><strong>使用退出(Exit)设备</strong></p>
 <p><code>isa-debug-exit</code>设备的功能非常简单。当一个<code>value</code>写入<code>iobase</code>指定的端口时，它会导致QEMU以退出状态（<code>exit status</code>）<code>(value &lt;&lt; 1) | 1</code> 退出。也就是说，当我们向端口写入<code>0</code>时，QEMU将以退出状态<code>(0 &lt;&lt; 1) | 1 = 1</code>退出，而当我们向端口写入<code>1</code>时，它将以退出状态<code>(1 &lt;&lt; 1) | 1 = 3</code>退出。</p>
 <p>这里我们使用<code>x86_64 crate</code>提供的 抽象，而不是手动调用<code>in</code>或<code>out</code>指令。为了添加对该<code>crate</code>的依赖，我们可以将其添加到我们的<code>Cargo.toml</code>中的<code>dependencies</code>小节中去：</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">x86_64</span> = <span class="string">&quot;0.14.2&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">x86_64</span> = <span class="string">&quot;0.14.2&quot;</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -758,7 +739,7 @@ background: azure;
 <p>发送数据的一个简单的方式是通过<a href="https://en.wikipedia.org/wiki/Serial_port">串行端口</a>，这是一个现代电脑中已经不存在的旧标准接口（译者注：玩过单片机的同学应该知道，其实译者上大学的时候有些同学的笔记本电脑还有串口的，没有串口的同学在烧录单片机程序的时候也都会需要usb转串口线，一般是51，像stm32有st-link，这个另说，不过其实也可以用串口来下载）。串口非常易于编程，QEMU可以将通过串口发送的数据重定向到宿主机的标准输出或是文件中。</p>
 <p>用来实现串行接口的芯片被称为 <a href="https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter">UARTs</a>。在x86上，有<a href="https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter#UART_models">很多UART模型</a>，但是幸运的是，它们之间仅有的那些不同之处都是我们用不到的高级功能。目前通用的UARTs都会兼容<a href="https://en.wikipedia.org/wiki/16550_UART">16550 UART</a>，所以我们在我们测试框架里采用该模型。</p>
 <p>我们使用<a href="https://docs.rs/uart_16550"><code>uart_16550</code></a> crate来初始化UART，并通过串口来发送数据。为了将该crate添加为依赖，我们将我们的<code>Cargo.toml</code>和<code>main.rs</code>修改为如下:</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">uart_16550</span> = <span class="string">&quot;0.2.0&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[dependencies]</span></span><br><span class="line"><span class="attr">uart_16550</span> = <span class="string">&quot;0.2.0&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p><code>uart_16550 crate</code> 包含了一个代表<code>UART</code>寄存器的<code>SerialPort</code>结构体，但是我们任然需要自己来创建一个相应的实例。我们使用以下内容来创建一个新的串口模块 <code>serial</code>：</p>
 <figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// in src/main.rs</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">mod</span> serial;</span><br></pre></td></tr></table></figure>
@@ -780,7 +761,7 @@ background: azure;
 <p>注意，由于我们使用了 <code>#[macro_export]</code> 属性， <code>serial_println</code>宏直接位于根命名空间下——所以通过<code>use crate::serial::serial_println</code> 来导入该宏是不起作用的。</p>
 <p><strong>QEMU参数</strong></p>
 <p>为了查看QEMU的串行输出，我们需要使用<code>-serial</code>参数将输出重定向到<code>stdout</code>：</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [</span><br><span class="line">    <span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>, <span class="string">&quot;-serial&quot;</span>, <span class="string">&quot;stdio&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [</span><br><span class="line">    <span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>, <span class="string">&quot;-serial&quot;</span>, <span class="string">&quot;stdio&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
 <p>现在，当我们运行 <code>cargo xtest</code>时，我们可以直接在控制台里看到测试输出了:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; cargo xtest</span><br><span class="line">    Finished dev [unoptimized + debuginfo] target(s) <span class="keyword">in</span> 0.02s</span><br><span class="line">     Running target/x86_64-blog_os/debug/deps/blog_os-7b7c37b4ad62551a</span><br><span class="line">Building bootloader</span><br><span class="line">    Finished release [optimized + debuginfo] target(s) <span class="keyword">in</span> 0.02s</span><br><span class="line">Running: `qemu-system-x86_64 -drive format=raw,file=/…/target/x86_64-blog_os/debug/</span><br><span class="line">    deps/bootimage-blog_os-7b7c37b4ad62551a.bin -device</span><br><span class="line">    isa-debug-exit,iobase=0xf4,iosize=0x04 -serial stdio`</span><br><span class="line">Running 1 tests</span><br><span class="line">trivial assertion... [ok]</span><br></pre></td></tr></table></figure>
@@ -798,7 +779,7 @@ background: azure;
 <p>由于现在所有的测试都将输出到控制台上，我们不再需要让QEMU窗口弹出一小会儿了——我们完全可以把窗口藏起来。</p>
 <p><strong>隐藏QEMU</strong></p>
 <p>由于我们使用<code>isa-debug-exit</code>设备和串行端口来报告完整的测试结果，所以我们不再需要QMEU的窗口了。我们可以通过向QEMU传递 <code>-display none</code>参数来将其隐藏:</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [</span><br><span class="line">    <span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>, <span class="string">&quot;-serial&quot;</span>, <span class="string">&quot;stdio&quot;</span>,</span><br><span class="line">    <span class="string">&quot;-display&quot;</span>, <span class="string">&quot;none&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-args</span> = [</span><br><span class="line">    <span class="string">&quot;-device&quot;</span>, <span class="string">&quot;isa-debug-exit,iobase=0xf4,iosize=0x04&quot;</span>, <span class="string">&quot;-serial&quot;</span>, <span class="string">&quot;stdio&quot;</span>,</span><br><span class="line">    <span class="string">&quot;-display&quot;</span>, <span class="string">&quot;none&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
 <p>现在QEMU完全在后台运行且没有任何窗口会被打开。这不仅不那么烦人，还允许我们的测试框架在没有图形界面的环境里，诸如CI服务器或是<a href="https://en.wikipedia.org/wiki/Secure_Shell">SSH</a>连接里运行。</p>
 <p><strong>超时</strong></p>
@@ -811,7 +792,7 @@ background: azure;
 </ul>
 <p>由于无限循环可能会在各种情况中发生，因此，<code> bootimage</code> 工具默认为每个可执行测试设置了一个长度为5分钟的超时时间。如果测试未在此时间内完成，则将其标记为失败，并向控制台输出“Timed Out（超时）“错误。这个功能确保了那些卡在无限循环里的测试不会一直阻塞<code>cargo xtest</code>。</p>
 <p>你可以将<code>loop {}</code>语句添加到 <code>trivial_assertion</code>测试中来进行尝试。当你运行 <code>cargo xtest</code>时，你可以发现该测试会在五分钟后被标记为超时。超时持续的时间可以通过<code>Cargo.toml</code>中的<code>test-timeout</code>来进行配置：</p>
-<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-timeout</span> = <span class="number">300</span>          <span class="comment"># (in seconds)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight toml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ in Cargo.toml</span></span><br><span class="line"></span><br><span class="line"><span class="section">[package.metadata.bootimage]</span></span><br><span class="line"><span class="attr">test-timeout</span> = <span class="number">300</span>          <span class="comment"># (in seconds)</span></span><br></pre></td></tr></table></figure>
 
 <p>如果你不想为了观察<code>trivial_assertion</code> 测试超时等待5分钟之久，你可以暂时降低将上述值。</p>
 <p>此后，我们不再需要 <code>trivial_assertion</code> 测试，所以我们可以将其删除。</p>
@@ -872,6 +853,47 @@ background: azure;
       </categories>
       <tags>
         <tag>camp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淺談一下 SmartPtr</title>
+    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
+    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
+<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+<span id="more"></span>
+
+
+<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
+<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
+<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>設計精巧的 Typelist</title>
+    <url>/2022/08/22/code/cpp/loki/typelist/</url>
+    <content><![CDATA[<p>設計精巧的 Typelist</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
       </tags>
   </entry>
 </search>
