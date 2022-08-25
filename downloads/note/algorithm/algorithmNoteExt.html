@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"andre-hjr.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.12.1","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 結果在 ${time} 毫秒找到","hits":"找到 ${hits} 個結果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="&amp;lrm;     #content { max-width: 60em; margin: auto; }   .title  { text-align: center;              margin-bottom: .2em; }   .subtitle { text-align: center;               font-size: medium;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="砍柴人的個人博客">
+<meta property="og:url" content="https://andre-hjr.github.io/downloads/note/algorithm/algorithmNoteExt.html">
+<meta property="og:site_name" content="砍柴人的個人博客">
+<meta property="og:description" content="&amp;lrm;     #content { max-width: 60em; margin: auto; }   .title  { text-align: center;              margin-bottom: .2em; }   .subtitle { text-align: center;               font-size: medium;">
+<meta property="og:locale" content="zh_HK">
+<meta property="article:published_time" content="2022-08-25T14:51:58.990Z">
+<meta property="article:modified_time" content="2022-08-25T14:49:50.429Z">
+<meta property="article:author" content="Andre">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://andre-hjr.github.io/downloads/note/algorithm/algorithmNoteExt">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-HK","comments":true,"permalink":"https://andre-hjr.github.io/downloads/note/algorithm/algorithmNoteExt.html","path":"downloads/note/algorithm/algorithmNoteExt.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | 砍柴人的個人博客
+</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">砍柴人的個人博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">砍柴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>檢索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概覽
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#table-of-contents"><span class="nav-number">1.</span> <span class="nav-text">Table of Contents</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#org74ec56f"><span class="nav-number">2.</span> <span class="nav-text">1. TODO 一些記錄</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#org69ea5d9"><span class="nav-number">2.1.</span> <span class="nav-text">1.1. Coding 計劃</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#org8b965f8"><span class="nav-number">3.</span> <span class="nav-text">2. 遞歸</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#orgbd8df39"><span class="nav-number">4.</span> <span class="nav-text">3. 貪心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#org966c7ae"><span class="nav-number">4.1.</span> <span class="nav-text">3.1. 字典序最小問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#orgac8f674"><span class="nav-number">4.2.</span> <span class="nav-text">3.2. Saruman&#39;s Army</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#orgf92b30c"><span class="nav-number">4.3.</span> <span class="nav-text">3.3. Fence Repair</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#orga84cb5e"><span class="nav-number">5.</span> <span class="nav-text">4. 動態規劃</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#orgda27606"><span class="nav-number">5.1.</span> <span class="nav-text">4.1. 記憶化搜索和動態規劃</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#org77cbbb3"><span class="nav-number">5.1.1.</span> <span class="nav-text">4.1.1. 01 背包問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#org2d48d12"><span class="nav-number">5.1.2.</span> <span class="nav-text">4.1.2. 最長公共子序列問題</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#org00f98e9"><span class="nav-number">5.1.3.</span> <span class="nav-text">4.1.3. 完全背包問題</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#orge217cc6"><span class="nav-number">6.</span> <span class="nav-text">5. 關於一些筆記</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#orgdd400a6"><span class="nav-number">6.1.</span> <span class="nav-text">5.1. Topic: 棧内存和堆内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#org0465145"><span class="nav-number">6.2.</span> <span class="nav-text">5.2. Topic: 貪心算法的證明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#org4120289"><span class="nav-number">6.3.</span> <span class="nav-text">5.3. Topic: Huffman 編碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#orgb3e4f63"><span class="nav-number">6.4.</span> <span class="nav-text">5.4. 使用 memset 進行初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#org4077fae"><span class="nav-number">6.5.</span> <span class="nav-text">5.5. 各種各樣的DP</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Andre"
+      src="/images/about/faceimage.jpg">
+  <p class="site-author-name" itemprop="name">Andre</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="mailto:pat_huangjianrong@yeah.net" title="E-Mail → mailto:pat_huangjianrong@yeah.net" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="回到頂部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-HK"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/downloads/">DOWNLOADS</a></li>
+            <li><a href="/downloads/note/">NOTE</a></li>
+            <li><a href="/downloads/note/algorithm/">ALGORITHM</a></li>
+            <li>ALGORITHMNOTEEXT</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      <div class="post-body">
+          <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2022-08-25 周四 22:49 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+</style>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org74ec56f">1. <span class="todo TODO">TODO</span> 一些記錄</a>
+<ul>
+<li><a href="#org69ea5d9">1.1. Coding 計劃</a></li>
+</ul>
+</li>
+<li><a href="#org8b965f8">2. 遞歸</a></li>
+<li><a href="#orgbd8df39">3. 貪心</a>
+<ul>
+<li><a href="#org966c7ae">3.1. 字典序最小問題</a></li>
+<li><a href="#orgac8f674">3.2. Saruman's Army</a></li>
+<li><a href="#orgf92b30c">3.3. Fence Repair</a></li>
+</ul>
+</li>
+<li><a href="#orga84cb5e">4. 動態規劃</a>
+<ul>
+<li><a href="#orgda27606">4.1. 記憶化搜索和動態規劃</a>
+<ul>
+<li><a href="#org77cbbb3">4.1.1. 01 背包問題</a></li>
+<li><a href="#org2d48d12">4.1.2. 最長公共子序列問題</a></li>
+<li><a href="#org00f98e9">4.1.3. 完全背包問題</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orge217cc6">5. 關於一些筆記</a>
+<ul>
+<li><a href="#orgdd400a6">5.1. Topic: 棧内存和堆内存</a></li>
+<li><a href="#org0465145">5.2. Topic: 貪心算法的證明</a></li>
+<li><a href="#org4120289">5.3. Topic: Huffman 編碼</a></li>
+<li><a href="#orgb3e4f63">5.4. 使用 memset 進行初始化</a></li>
+<li><a href="#org4077fae">5.5. 各種各樣的DP</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org74ec56f" class="outline-2">
+<h2 id="org74ec56f"><span class="section-number-2">1.</span> <span class="todo TODO">TODO</span> 一些記錄</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org69ea5d9" class="outline-3">
+<h3 id="org69ea5d9"><span class="section-number-3">1.1.</span> Coding 計劃</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li class="off"><code>[&#xa0;]</code> Note Info</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8b965f8" class="outline-2">
+<h2 id="org8b965f8"><span class="section-number-2">2.</span> 遞歸</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp">;; (message "Hello World!")
+(defun fact(n)
+  (cond ((= 0 n) 1)
+	(t (* (fact (- n 1)) n))))
+(defun fib(n)
+  (cond ((&lt;= n 1) n)
+	(t (+ (fib (- n 1)) (fib (- n 2))))))
+;; (fact 4)
+;; (fib 3)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgbd8df39" class="outline-2">
+<h2 id="orgbd8df39"><span class="section-number-2">3.</span> 貪心</h2>
+<div class="outline-text-2" id="text-3">
+<blockquote>
+<p>
+有 n 項工作，每項工作分別在 s<sub>i</sub> 時間開始， 在 t<sub>i</sub> 時間結束。對於每項工作，你都可以選擇參加與否。如果選擇了參加，那麽自始至終都必須全程參與。此外，參與工作的時間段不能重叠。（即使是開始的瞬間和結束的瞬間的重叠也是不允許的）。
+</p>
+</blockquote>
+
+<p>
+<b><b>在可選的工作中，每次都選取結束時間最早的工作</b></b>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">enum { MAX_N = 100000 };
+int N, S[MAX_N], T[MAX_N];
+std::pair&lt;int, int&gt; itv[MAX_N];
+
+{
+  for (int i = 0; i &lt; N; ++i)
+    { itv[i].first = T[i];
+      itv[i].second = S[i]; }
+  std::sort(itv, itv + N);
+  int ans = 0, t = 0;
+  for (int i = 0; i &lt; N; ++i)
+    { if (t &lt; itv[i].second)
+	{ ++ans;
+	  t = itv[i].first; }}
+  printf("%d\n", ans);
+}
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org966c7ae" class="outline-3">
+<h3 id="org966c7ae"><span class="section-number-3">3.1.</span> 字典序最小問題</h3>
+<div class="outline-text-3" id="text-3-1">
+<blockquote>
+<p>
+給定長度為 N 的字符串 S， 要構造一個長度為 N 的字符串 T。起初，T 是一個空串，隨後反復進行下列任意操作。
+</p>
+<ul class="org-ul">
+<li>從 S 的頭部刪除一個字符，加到 T 的尾部。</li>
+<li>從 S 的尾部刪除一個字符，加到 T 的尾部。</li>
+</ul>
+
+<p>
+目的就是要構造字典序盡可能小的字符串 T。
+</p>
+</blockquote>
+
+<p>
+從字典序的性質上看，無論 T 的末尾有多大，只要前面部分的較小就可以。所以我們可以試一下 貪心算法：
+</p>
+
+<p>
+_<sub>不斷取</sub> S 的開頭和結尾中較小的一個字符放到 T 的末尾__
+</p>
+
+<ul class="org-ul">
+<li>按照字典序比較 S 和將 S 反轉后的字符串 S'。</li>
+<li>如果 S 較小， 就從 S 的開頭取出一個文字，追加到 T 的末尾。</li>
+<li>如果 S' 較小， 就從 S' 的開頭取出一個文字，追加到 T 的末尾。</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int N = 0;
+char S[MAX_N + 1];
+
+void solve()
+{ int a = 0, b = N - 1;
+  while (a &lt;= b)
+    { bool left = false;
+      for (int i = 0; a + i &lt;= b; ++i)
+	{ if (S[a + i] &lt; S[b - i])
+	    { left = true;
+	      break; }
+	  else if (S[a + i] &gt; S[b - i])
+	    { left = false;
+	      break; } }
+      if (left) putchar(S[a++]);
+      else putchar(S[b--]); }
+      putchar('\n'); }
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgac8f674" class="outline-3">
+<h3 id="orgac8f674"><span class="section-number-3">3.2.</span> Saruman's Army</h3>
+<div class="outline-text-3" id="text-3-2">
+<blockquote>
+<p>
+直綫上有 N 個點。點 i 的位置是 X<sub>i</sub>。從這 N 個點中選取若干個，給它們加上標記。對每一個點，其距離為 R 以内的區域裏必須有帶有標記的點（自己本身帶有標記的點，可以認爲與其距離為 0 的地方有一個帶有標記的點）。在滿足這個條件的情況下，希望能為盡可能少的點i俺家標記。請問至少要有多少點被加上標記？
+</p>
+</blockquote>
+
+<p>
+我們從最左邊開始考慮。對於這個點，到距其 R 以内的區域内必須要有帶有標記的點。（此點位於最左邊，所以顯然）帶有標記的這個點一定在此點右側（包含這個點自身）。
+</p>
+
+<p>
+於是，究竟要給哪個點加上標記。答案應該是從最左邊的點開始，距離為 R 以内的最遠的點。因爲更左的區域沒有覆蓋的意義，所以應該京可能覆蓋更靠右的點。
+</p>
+
+<p>
+加上了第一個標記后，剩下的部分也用同樣的辦法處理。對於添加了符號的點右側相距超過 R 的下一個點，采用同樣的方法找到其有側 R 距離以内最遠的點添加標記。在所有的點都被覆蓋之前不斷重複如下動作。
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int N, R, X[MAX_N];
+
+{
+  std::sort(X, X + N);
+  int i = 0, ans = 0;
+  while ( i &lt; N )
+    { int s = X[i++];
+      // s 是沒有被覆蓋的最左的點的位置
+      while (i &lt; N &amp;&amp; X[i] &lt;= s + R) ++i;
+      // 一直向右前進直到距 s 的距離大於 R 的點
+      int p = X[i - 1];
+      // p 是新加上標記的點的位置
+      while (i &lt; N &amp;&amp; X[i] &lt;= p + R) ++i;
+      // 一直向右前進直到距 p 的距離大於 R 的點
+      ++ans; }
+  printf("%d\n", ans); }
+
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgf92b30c" class="outline-3">
+<h3 id="orgf92b30c"><span class="section-number-3">3.3.</span> Fence Repair</h3>
+<div class="outline-text-3" id="text-3-3">
+<blockquote>
+<p>
+農夫爲了修理柵欄，要將一塊很長的木板切割成 N 快。準備切成的木板的長度為 L<sub>1</sub>、L<sub>2</sub>、&#x2026; 、L<sub>N</sub>，未切割前木板的長度恰好為切割后模板長度的總和。每次切斷模板時，需要的開銷為這塊木板的長度。請求出按照目標要求將模板切割完最小的開銷是多少？
+</p>
+</blockquote>
+
+<p>
+通過二叉樹的方式描述相關的切割。這裏樹中每個葉子節點就對應了切割出的一塊塊木板。葉子節點的深度就對應了爲了得到對應木板所需的切割次數，開銷的合計就是各葉子節點的
+</p>
+
+<p>
+<b><b>木板的長度 * 節點的深度</b></b>
+</p>
+
+<p>
+的總和。此時的最佳切割方法首先應該具有如下性質
+</p>
+
+<p>
+最短的板與次短的板的節點應當是兄弟節點。
+</p>
+
+<p>
+切割方式：
+</p>
+
+<p>
+(L1 + L2), L3, L4, &#x2026;, LN
+</p>
+
+<p>
+L: sort()
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int N, L[MAX_N];
+{
+  long long ans {0};
+  whlie (1 &lt; N)
+    { int mii1 = 0, mii2 = 1;
+      if (L[mii1] &gt; L[mii2]) std::swap(mii1, mii2);
+      for (int i = 0; i &lt; N; ++i)
+	{ if (L[i] &lt; L[mii1])
+	    { mii2 = mii1;
+	      mii1 = i; }
+	  else if (L[i] &lt; L[mii2])
+	    { mii2 = i; } }
+      int t = L[mii1] + L[mii2];
+      ans += t;
+      if (N - 1 == mii1) std::swap(mii1, mii2);
+      L[mii1] = t;
+      L[mii2] = L[N - 1];
+      --N; }
+  printf("%lld\n", ans);
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orga84cb5e" class="outline-2">
+<h2 id="orga84cb5e"><span class="section-number-2">4.</span> 動態規劃</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-orgda27606" class="outline-3">
+<h3 id="orgda27606"><span class="section-number-3">4.1.</span> 記憶化搜索和動態規劃</h3>
+<div class="outline-text-3" id="text-4-1">
+</div>
+<div id="outline-container-org77cbbb3" class="outline-4">
+<h4 id="org77cbbb3"><span class="section-number-4">4.1.1.</span> 01 背包問題</h4>
+<div class="outline-text-4" id="text-4-1-1">
+<blockquote>
+<p>
+有 n 個重量和價值分別為 w<sub>i</sub>，v<sub>i</sub> 的物品。從這些物品中挑選出縂重量不超過 W 的物品，求所有挑選方案中價值總和的最大值
+</p>
+</blockquote>
+
+<p>
+rec(0, w) = max { rec(1, w), rec(1, W - w[0]) + v[i] }
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int n, W, w[MAX_N], v[MAX_N];
+
+int rec(int i, int j)
+{ int res;
+  if (i == n)
+    { res = 0; }
+  else if (j &lt; w[i])
+    { res = rec(i + 1, j); }
+  else
+    { res = std::max(rec(i + 1, j), rec(i + 1, j - w[i]) + v[i]); }
+  return res; }
+
+{
+  printf("%d\n", rec(0, w));
+ }
+
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int dp[MAX_N + 1][MAX_W + 1];
+
+int rec(itn i, int j)
+{ if (dp[i][j] &gt;= 0 )
+    { return dp[i][j]; }
+  int res;
+  if (i == n)
+    { res = 0; }
+  else if (j &lt; w[i])
+    { rec = rec(i + 1, j); }
+  else
+    { res = std::mac(rec(i + 1, j), rec(i + 1, j - w[i]) + v[i]); }
+  return dp[i][j] = res; }
+</pre>
+</div>
+
+
+<p>
+<b><b>我們仔細研究一下前面的算法利用到的記憶化數組。記 dp[i][j] 為根據 rec 的定義， 從第 i 個物品開始挑選總重小於 j 時， 總價值的最大值。於是有如下遞推式</b></b>
+</p>
+
+<p>
+\[dp[n][j] = 0\]
+</p>
+
+<p>
+\[
+dp[i][j] = \begin{cases}
+dp[i + 1][j] & (j < w[i]) \\
+max(dp[i + 1][j], dp[i + 1][j - w[i]] + v[i]) & (other)
+\end{cases}
+\]
+</p>
+
+<p>
+**需要注意，因爲全局數組的内容會被初始化為 0，所以前面的源代碼中并沒有顯式地將初項 設置爲 0 進行複製，不過當一次運行要處理多組輸入數據時，必須要進行初始化。
+</p>
+<div class="org-src-container">
+<pre class="src src-cpp">int dp[MAX_N + 1][MAX_W + 1];
+
+{
+  for (int i = n - 1; i &gt;= 0; --i)
+    { for (int j = 0; j &lt;= W; ++j)
+	{ if (j &lt; w[i])
+	    { dp[i][j] = dp[i + 1][j]; }
+	  else
+	    { dp[i][j] = std::max(dp[i + 1][j], dp[i + 1][j - w[i]] + v[i]); } } }
+  printf("%d\n", dp[0][W]);
+}
+</pre>
+</div>
+</div>
+
+
+<ol class="org-ol">
+<li><a id="orgc0a6ed7"></a>窮竭搜索<br />
+<div class="outline-text-5" id="text-4-1-1-1">
+<p>
+這題的另外一個遞歸式子
+</p>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int rec(int i, int j, int sum)
+{ int res;
+  if (i == n)
+    { res = sum; }
+  else if (j &lt; w[i])
+    { res = rec (i + 1, j, sum); }
+  else
+    { res = max(rec(i + 1, j, sum), rec(i + 1, j - w[i], sum + v[i])); }
+  return res; }
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org2d48d12" class="outline-4">
+<h4 id="org2d48d12"><span class="section-number-4">4.1.2.</span> 最長公共子序列問題</h4>
+<div class="outline-text-4" id="text-4-1-2">
+<blockquote>
+<p>
+給定兩個字符串 s<sub>i</sub> (i = 1, 2, &#x2026;, n) 和 t<sub>i</sub> (i = 1, 2, &#x2026;, n)。求出這兩個字符串最長的公共子序列的長度。字符串 s<sub>i</sub> (i = 1, 2, &#x2026;, n) 的子序列指可以表示爲 S<sub>i<sub>j</sub></sub> (j = 1, 2, &#x2026;, m; i<sub>j</sub> &lt; i<sub>j + 1</sub>) 的序列
+</p>
+</blockquote>
+
+<p>
+\[
+dp[i + 1][j + 1] =\]
+</p>
+
+<p>
+\[
+dp[i + 1][j + 1] = \begin{cases}
+max(dp[i][j] + 1, dp[i][j + 1], dp[i + 1][j]) & (s_{i + 1} = t_{j + 1}) \\
+max(dp[i][j + 1], dp[i + 1][j]) & (other)
+\end{cases}
+\]
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-cpp">int n, m, dp[MAX_N + 1][MAX_M + 1];
+char s[MAX_N], t[MAX_M];
+
+
+{
+  for (int i = 0; i &lt; n; ++i)
+    { for (int j = 0; j &lt; m; ++j)
+	{ if (s[i] == t[j])
+	    { dp[i + 1][j + 1] = dp[i][j] + 1; }
+	  else
+	    { dp[i + 1][j + 1] = std::max(dp[i][j + 1], dp[i + 1][j]); } } }
+  printf("%d\n", dp[n][m]);
+}
+
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org00f98e9" class="outline-4">
+<h4 id="org00f98e9"><span class="section-number-4">4.1.3.</span> 完全背包問題</h4>
+<div class="outline-text-4" id="text-4-1-3">
+<blockquote>
+<p>
+有 n 種重量和價值分別為 w<sub>i</sub>, v<sub>i</sub>的物品。從這些物品中挑選總重量不超過 W 的物品，求出挑選物品價值總和的最大值。在這裏，每種物品可以挑選任意多件。
+</p>
+</blockquote>
+
+<div class="org-src-container">
+<pre class="src src-cpp">int dp[MAX_N + 1][MAX_W + 1];
+
+
+{
+  for (int i = 0; i &lt; n; ++i)
+    { for (int j = 0; j &lt;= W; ++j)
+	{ for (int k = 0; k * w[i] &lt;= j; ++j)
+	    { dp[i + 1][j] = std::max(dp[i + 1][j] , dp[i][j - k * w[i]] + k * v[i]); } } }
+  printf("%d\n", dp[n][w]);
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orge217cc6" class="outline-2">
+<h2 id="orge217cc6"><span class="section-number-2">5.</span> 關於一些筆記</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgdd400a6" class="outline-3">
+<h3 id="orgdd400a6"><span class="section-number-3">5.1.</span> Topic: 棧内存和堆内存</h3>
+<div class="outline-text-3" id="text-5-1">
+<blockquote>
+<p>
+調用函數時，主調的函數所擁有的局部變量等信息需要存儲在特定的内存區域。這個區域被稱作棧内存區。另一方面利用`new`或者`malloc`進行分配的内存區域被稱爲堆内存。
+</p>
+</blockquote>
+
+<p>
+棧内存在程序啓動時被統一分配，此後不能再擴大。由於這一區域有上限，所以函數的遞歸深度也有上限。雖然與函數中定義的局部變量的數目有關，不過一般情況下`C`和`C++`中進行上萬次的遞歸是可以的。
+</p>
+
+<p>
+全局變量被保存在堆内存區。通常不推薦使用全局變量，但是在程序設計競賽中，由於函數通常不是那麽多，并且常常會有多個函數訪問同一個數組，因此利用全局變量就很方便。此外，有時必須要申請巨大的數組，與放置在棧内存上相比，將其放在堆内存上可以減少棧空間溢出的危險。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org0465145" class="outline-3">
+<h3 id="org0465145"><span class="section-number-3">5.2.</span> Topic: 貪心算法的證明</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+結束（以下問題）時間越早之後可選的工作也就越多。這是該算法能夠正確處理問題的一個直觀解釋。但是，這不能算是嚴格意義上的證明。可以通過下面的方法來證明
+</p>
+
+<ul class="org-ul">
+<li>與其他選擇方案相比，該算法的選擇方案在選取了相同數量的更早開始的工作時，其最終結束時間不會比其他方案的更晚。</li>
+<li>所以，不存在選取更多工作的選擇方案。</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-org4120289" class="outline-3">
+<h3 id="org4120289"><span class="section-number-3">5.3.</span> Topic: Huffman 編碼</h3>
+</div>
+
+<div id="outline-container-orgb3e4f63" class="outline-3">
+<h3 id="orgb3e4f63"><span class="section-number-3">5.4.</span> 使用 memset 進行初始化</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+**雖然 memset 按照 1 字節為單位對内存進行填充， -1 的每一位二進制位都是1，所以可以像 0 一樣用 memset 進行初始化。 通過使用 memset 可以快速地對高維數組等進行初始化，到那時需要注意無法初始化成 1 之類的數值。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org4077fae" class="outline-3">
+<h3 id="org4077fae"><span class="section-number-3">5.5.</span> 各種各樣的DP</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2022-08-25 周四 22:49</p>
+<p class="validation"><a target="_blank" rel="noopener" href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
+
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/downloads/">DOWNLOADS</a></li>
+            <li><a href="/downloads/note/">NOTE</a></li>
+            <li><a href="/downloads/note/algorithm/">ALGORITHM</a></li>
+            <li>ALGORITHMNOTEEXT</li>
+  </ul>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Andre</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.1/es5/tex-mml-chtml.js","integrity":"sha256-hlC2uSQYTmPsrzGZTEQEg9PZ1a/+SV6VBCTclohf2og="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
