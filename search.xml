@@ -153,6 +153,39 @@
       </tags>
   </entry>
   <entry>
+    <title>Python中簡單的網絡編程</title>
+    <url>/2022/08/22/code/python/net/</url>
+    <content><![CDATA[<p>Python中簡單的網絡編程</p>
+<div class="note info no-icon"><p>十分重要的是， Python的吞吐其實并不優秀。但是Python是一個十分重要工具語言，它可以做到的是可以簡化測試編程的壓力。</p>
+</div>
+<span id="more"></span>
+<details class="note warning no-icon"><summary><p>需要注意的點</p>
+</summary>
+<div class="tabs" id="warntabs"><ul class="nav-tabs"><li class="tab active"><a href="#warntabs-1">問題</a></li><li class="tab"><a href="#warntabs-2">一些Features</a></li></ul><div class="tab-content"><div class="tab-pane active" id="warntabs-1"><ul>
+<li>比較困難的是 TCP 如果是在自己的機器上測試TCP，可能不太容易模擬多個不同的客戶端</li>
+</ul></div><div class="tab-pane" id="warntabs-2"></div></div></div>
+</details>
+
+<h1 id="Server-相關的代碼"><a href="#Server-相關的代碼" class="headerlink" title="Server 相關的代碼"></a>Server 相關的代碼</h1><details class="note info no-icon"><summary><p>server的參考代碼</p>
+</summary>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ --- tcp 服务端程序 server.py ---</span></span><br><span class="line"><span class="comment">#\ 导入 socket 库</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 主机地址，表示绑定本机所有网络接口ip地址</span></span><br><span class="line"><span class="comment">#\ 等待客户端连接</span></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line"><span class="comment">#\ 端口号</span></span><br><span class="line">PORT = <span class="number">5000</span></span><br><span class="line"><span class="comment">#\ 定义一次从socket缓冲区最多读入512个字节数据，可自定义</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象</span></span><br><span class="line"><span class="comment">#\ 参数AF_INET表示该socket网络层使用IP协议</span></span><br><span class="line"><span class="comment">#\ 参数SOCK_STREAM表示该socket传输层使用tcp协议</span></span><br><span class="line">listenSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ socket绑定地址和端口</span></span><br><span class="line">listenSocket.bind((IP, PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 使socket处于监听状态，等待客户端的连接请求</span></span><br><span class="line"><span class="comment">#\ 参数5表示， 最多接5个等待连接的客户端，可自定义</span></span><br><span class="line">listenSocket.listen(<span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;服务器启动成功，在<span class="subst">&#123;PORT&#125;</span>端口等待客户端连接...&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dataSocket, addr = listenSocket.accept()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;接受一个客户端连接：&#x27;</span>, addr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 尝试读取对方发送的信息</span></span><br><span class="line">    <span class="comment">#\ BUFLEN 指定从接收缓冲里最多读取多少字节</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 如果返回空bytes, 表示对方关闭了连接</span></span><br><span class="line">    <span class="comment">#\ 退出循环，结束消息收发</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 读取的字节数据是bytes类型，需要解码为字符串</span></span><br><span class="line">    info = recved.decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;收到对方信息：<span class="subst">&#123;info&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 发送的数据类型必须是bytes,所以要编码</span></span><br><span class="line">    dataSocket.send(<span class="string">f&#x27;服务端接收到了信息<span class="subst">&#123;info&#125;</span>&#x27;</span>.encode())</span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"><span class="comment">#\ listenSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</details>
+
+<h1 id="Client-相關的代碼"><a href="#Client-相關的代碼" class="headerlink" title="Client 相關的代碼"></a>Client 相關的代碼</h1><details class="note info no-icon"><summary><p>client的參考代碼</p>
+</summary>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\  --- tcp 客户端程序 client.py ---</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">SERVER_PORT = <span class="number">5000</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象，指明协议</span></span><br><span class="line">dataSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 连接服务器socket</span></span><br><span class="line">dataSocket.connect((IP, SERVER_PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 以下部分传入数据的格式仅供参考，这里示范传入字符串</span></span><br><span class="line"><span class="comment">#\ k但是客户端和服务端之间的交流为字节码，需要字符串与字节码的转化</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 从终端读入用户输入的字符串（可自定义是否为字符串）</span></span><br><span class="line">    toSend = <span class="built_in">input</span>(<span class="string">&#x27;&gt;&gt; &#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> toSend == <span class="string">&#x27;exit&#x27;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 发送信息，也要编码为 byes</span></span><br><span class="line">    dataSocket.send(toSend.encode())</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 等待接收服务段的消息</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line">    <span class="comment">#\ 如果返回空bytes，表示对方关闭了连接</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 打印读取的信息</span></span><br><span class="line">    <span class="built_in">print</span>(recved.decode())</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</details>]]></content>
+      <categories>
+        <category>python</category>
+        <category>network</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>參營日常 - OSCamp2022</title>
     <url>/2022/07/06/os/camp/note/</url>
     <content><![CDATA[<p>這是 Open-Source OS Training Comp 2022 的參營日常，主要做一些訓練的筆記，以備回顧和分享。周知！嚴格意義上并不是技術文檔，可以作爲一種筆記日志。</p>
@@ -709,7 +742,9 @@
 <h2 id="RISC-V-的相關筆記"><a href="#RISC-V-的相關筆記" class="headerlink" title="RISC-V 的相關筆記"></a>RISC-V 的相關筆記</h2><hr>
 <h1 id="第二階段的學習記錄"><a href="#第二階段的學習記錄" class="headerlink" title="第二階段的學習記錄"></a>第二階段的學習記錄</h1><details class="note default"><summary><p>第二階段的一些記錄</p>
 </summary>
-<div class="tabs" id="secondrecordtags"><ul class="nav-tabs"><li class="tab active"><a href="#secondrecordtags-1">心得</a></li></ul><div class="tab-content"><div class="tab-pane active" id="secondrecordtags-1"><ol>
+<div class="tabs" id="secondrecordtags"><ul class="nav-tabs"><li class="tab active"><a href="#secondrecordtags-1">相关文档</a></li><li class="tab"><a href="#secondrecordtags-2">心得</a></li></ul><div class="tab-content"><div class="tab-pane active" id="secondrecordtags-1"><p>这是第二阶段独立出来的文档</p>
+<p>rCore-N 的学习总结： <a href="https://i1zg818wt7.feishu.cn/wiki/wikcnZ6QYqRetw1JUIUJySvsHwh">rCore-N</a></p>
+<p>rCore-N 实验复现的问题汇总： <a href="https://i1zg818wt7.feishu.cn/wiki/wikcnj30jtaePruEtzUjPOWDdHh">rCore-N 实验复现的问题</a></p></div><div class="tab-pane" id="secondrecordtags-2"><ol>
 <li>關於任務和實習</li>
 </ol></div></div></div>
 
@@ -946,39 +981,6 @@
       </categories>
       <tags>
         <tag>camp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python中簡單的網絡編程</title>
-    <url>/2022/08/22/code/python/net/</url>
-    <content><![CDATA[<p>Python中簡單的網絡編程</p>
-<div class="note info no-icon"><p>十分重要的是， Python的吞吐其實并不優秀。但是Python是一個十分重要工具語言，它可以做到的是可以簡化測試編程的壓力。</p>
-</div>
-<span id="more"></span>
-<details class="note warning no-icon"><summary><p>需要注意的點</p>
-</summary>
-<div class="tabs" id="warntabs"><ul class="nav-tabs"><li class="tab active"><a href="#warntabs-1">問題</a></li><li class="tab"><a href="#warntabs-2">一些Features</a></li></ul><div class="tab-content"><div class="tab-pane active" id="warntabs-1"><ul>
-<li>比較困難的是 TCP 如果是在自己的機器上測試TCP，可能不太容易模擬多個不同的客戶端</li>
-</ul></div><div class="tab-pane" id="warntabs-2"></div></div></div>
-</details>
-
-<h1 id="Server-相關的代碼"><a href="#Server-相關的代碼" class="headerlink" title="Server 相關的代碼"></a>Server 相關的代碼</h1><details class="note info no-icon"><summary><p>server的參考代碼</p>
-</summary>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\ --- tcp 服务端程序 server.py ---</span></span><br><span class="line"><span class="comment">#\ 导入 socket 库</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 主机地址，表示绑定本机所有网络接口ip地址</span></span><br><span class="line"><span class="comment">#\ 等待客户端连接</span></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line"><span class="comment">#\ 端口号</span></span><br><span class="line">PORT = <span class="number">5000</span></span><br><span class="line"><span class="comment">#\ 定义一次从socket缓冲区最多读入512个字节数据，可自定义</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象</span></span><br><span class="line"><span class="comment">#\ 参数AF_INET表示该socket网络层使用IP协议</span></span><br><span class="line"><span class="comment">#\ 参数SOCK_STREAM表示该socket传输层使用tcp协议</span></span><br><span class="line">listenSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ socket绑定地址和端口</span></span><br><span class="line">listenSocket.bind((IP, PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 使socket处于监听状态，等待客户端的连接请求</span></span><br><span class="line"><span class="comment">#\ 参数5表示， 最多接5个等待连接的客户端，可自定义</span></span><br><span class="line">listenSocket.listen(<span class="number">5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&#x27;服务器启动成功，在<span class="subst">&#123;PORT&#125;</span>端口等待客户端连接...&#x27;</span>)</span><br><span class="line"></span><br><span class="line">dataSocket, addr = listenSocket.accept()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;接受一个客户端连接：&#x27;</span>, addr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 尝试读取对方发送的信息</span></span><br><span class="line">    <span class="comment">#\ BUFLEN 指定从接收缓冲里最多读取多少字节</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 如果返回空bytes, 表示对方关闭了连接</span></span><br><span class="line">    <span class="comment">#\ 退出循环，结束消息收发</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 读取的字节数据是bytes类型，需要解码为字符串</span></span><br><span class="line">    info = recved.decode()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;收到对方信息：<span class="subst">&#123;info&#125;</span>&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 发送的数据类型必须是bytes,所以要编码</span></span><br><span class="line">    dataSocket.send(<span class="string">f&#x27;服务端接收到了信息<span class="subst">&#123;info&#125;</span>&#x27;</span>.encode())</span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"><span class="comment">#\ listenSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-</details>
-
-<h1 id="Client-相關的代碼"><a href="#Client-相關的代碼" class="headerlink" title="Client 相關的代碼"></a>Client 相關的代碼</h1><details class="note info no-icon"><summary><p>client的參考代碼</p>
-</summary>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#\  --- tcp 客户端程序 client.py ---</span></span><br><span class="line"><span class="keyword">from</span> socket <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">IP = <span class="string">&#x27;127.0.0.1&#x27;</span></span><br><span class="line">SERVER_PORT = <span class="number">5000</span></span><br><span class="line">BUFLEN = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 实例化一个socket对象，指明协议</span></span><br><span class="line">dataSocket = socket(AF_INET, SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 连接服务器socket</span></span><br><span class="line">dataSocket.connect((IP, SERVER_PORT))</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ 以下部分传入数据的格式仅供参考，这里示范传入字符串</span></span><br><span class="line"><span class="comment">#\ k但是客户端和服务端之间的交流为字节码，需要字符串与字节码的转化</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="comment">#\ 从终端读入用户输入的字符串（可自定义是否为字符串）</span></span><br><span class="line">    toSend = <span class="built_in">input</span>(<span class="string">&#x27;&gt;&gt; &#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> toSend == <span class="string">&#x27;exit&#x27;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 发送信息，也要编码为 byes</span></span><br><span class="line">    dataSocket.send(toSend.encode())</span><br><span class="line"></span><br><span class="line">    <span class="comment">#\ 等待接收服务段的消息</span></span><br><span class="line">    recved = dataSocket.recv(BUFLEN)</span><br><span class="line">    <span class="comment">#\ 如果返回空bytes，表示对方关闭了连接</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> recved:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="comment">#\ 打印读取的信息</span></span><br><span class="line">    <span class="built_in">print</span>(recved.decode())</span><br><span class="line"></span><br><span class="line"><span class="comment">#\ dataSocket.close()</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-</details>]]></content>
-      <categories>
-        <category>python</category>
-        <category>network</category>
-      </categories>
-      <tags>
-        <tag>network</tag>
       </tags>
   </entry>
   <entry>
