@@ -89,7 +89,16 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
 </details>
 
-<h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><h2 id="折半查找"><a href="#折半查找" class="headerlink" title="折半查找"></a>折半查找</h2><details class="note default no-icon"><summary><p>折半查找</p>
+<h1 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h1><h2 id="折半查找"><a href="#折半查找" class="headerlink" title="折半查找"></a>折半查找</h2><p>相关算法解释</p>
+<details class="note primary no-icon"><summary><p>折半查找</p>
+</summary>
+<p><strong>輸入</strong>: 有序数组 $a_{1}, a_{2}, \cdots, a_{n}$, $n &gt; 0$， $X$， 其中 $a_{1} \le a_{2} \le a_{3} \cdots \le a_{n}$</p>
+<p><strong>输出</strong>: 如果$a_{j} &#x3D; X$， 那么输出$j$；如果不存在$j$使$a_{j} &#x3D; X$, 那么输出$0$.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">i := 1 // 第一个数据</span><br><span class="line">m := n // 最后一个数据</span><br><span class="line">While i &lt;= m do</span><br><span class="line">Begin</span><br><span class="line">  j := Math:::Floor[ (i + m) / 2]</span><br><span class="line">  If a[i] = X then Output j  and Stop</span><br><span class="line">  If a[i] &gt; X then m := j - 1</span><br><span class="line">  else i := j + 1</span><br><span class="line">End</span><br><span class="line">j := 0</span><br><span class="line">Output j</span><br></pre></td></tr></table></figure>
+</details>
+
+
+<details class="note default no-icon"><summary><p>折半查找</p>
 </summary>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> _Tp&gt;</span><br><span class="line"><span class="function">_Tp <span class="title">binary_swarch</span><span class="params">(<span class="type">const</span> _Tp a[], <span class="type">const</span> <span class="type">size_t</span> n, <span class="type">const</span> _Tp x)</span></span></span><br><span class="line"><span class="function"></span>&#123;   <span class="type">size_t</span> _left = <span class="number">0</span>, right = n - <span class="number">1</span>, mid = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">whlie</span> (left &lt;= right)</span><br><span class="line">    &#123;   mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (x &gt; a[mid])</span><br><span class="line">        &#123;   left = mid + <span class="number">1</span>; &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (x &lt; a[mid])</span><br><span class="line">        &#123;   right = mid - <span class="number">1</span>; &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;   <span class="keyword">return</span> mid; &#125; &#125;</span><br><span class="line">    <span class="keyword">return</span> -(left + <span class="number">1</span>); &#125;</span><br></pre></td></tr></table></figure>
 </details>
@@ -186,44 +195,74 @@
       </tags>
   </entry>
   <entry>
-    <title>毕设开发日记</title>
-    <url>/2022/10/31/dev/note/daily/</url>
-    <content><![CDATA[<p>這是畢設相關的開發筆記，淺淺記錄一下自己寫畢設的一些記錄</p>
+    <title>汇总Leetcode的问题</title>
+    <url>/2022/11/12/code/leetcode/index/</url>
+    <content><![CDATA[<p>💻 记录一些， ⌨️ 代码错误</p>
 <span id="more"></span>
 
-
-<h1 id="日記部分"><a href="#日記部分" class="headerlink" title="日記部分"></a>日記部分</h1><h2 id="October"><a href="#October" class="headerlink" title="October"></a>October</h2><div class="tabs" id="notes"><ul class="nav-tabs"><li class="tab active"><a href="#notes-1">Note</a></li><li class="tab"><a href="#notes-2">Special</a></li></ul><div class="tab-content"><div class="tab-pane active" id="notes-1"><p>今天，需要開始做一些和代碼相關的動作了。感覺時間已經是處於一個比較緊張的段了。</p></div><div class="tab-pane" id="notes-2"></div></div></div>
-
-<h1 id="常見錯誤"><a href="#常見錯誤" class="headerlink" title="常見錯誤"></a>常見錯誤</h1>]]></content>
+<h1 id="每日一题"><a href="#每日一题" class="headerlink" title="每日一题"></a>每日一题</h1><ul>
+<li><input checked="" disabled="" type="checkbox"> 🔗 <a href="/2022/11/12/code/leetcode/problems/790/" title="多米诺和托米诺平铺">多米诺和托米诺平铺</a> 📅 2022年11月12日 ✅</li>
+</ul>
+]]></content>
+      <categories>
+        <category>leetcode</category>
+      </categories>
       <tags>
-        <tag>dev,daily</tag>
+        <tag>code</tag>
       </tags>
   </entry>
   <entry>
-    <title>淺談一下 SmartPtr</title>
-    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
-    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
-<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+    <title>开发日记</title>
+    <url>/2022/10/31/dev/note/daily/</url>
+    <content><![CDATA[<p>记录一些开发相关的工作</p>
 <span id="more"></span>
 
+<h1 id="Starfish"><a href="#Starfish" class="headerlink" title="Starfish"></a>Starfish</h1><div class="note danger"><div class="note info"><p>🔗 <a href="/2022/11/12/dev/starfish/dailyNote/" title="具体的描述文档">具体的描述文档</a></p>
+</div>
 
-<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+<details class="note success no-icon"><summary><p>Starfish的计划</p>
+</summary>
+<p>Starfish的计划<br>    - [ ] 我们抄袭 rCore， 实现一个 Starfish 的内核<br>    - [ ] 同样抄袭 tornado 的 shared-schedule，实现一个 RingSchedule<br>    - [ ] Starfish + RingSchedule 做个杂糅<br>    - [ ] 最好能做测试</p>
 
-<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
-<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
-<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</details></div>
 
 
+<h1 id="toyDB"><a href="#toyDB" class="headerlink" title="toyDB"></a>toyDB</h1><div class="note danger"><div class="note info"><p>🔗 <a href="/2022/11/12/dev/toyDB/dailyNote/" title="具体的描述文档">具体的描述文档</a></p>
+</div>
+</div>]]></content>
+      <tags>
+        <tag>dev</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>毕设（Starfish）的开发日记</title>
+    <url>/2022/11/12/dev/starfish/dailyNote/</url>
+    <content><![CDATA[<p>這是畢設相關的開發筆記，淺淺記錄一下自己寫畢設的一些記錄</p>
+<span id="more"></span>
 
-]]></content>
+<details class="note info"><summary><p>写在前面的一些话</p>
+</summary>
+<div class="note success"><p>Starfish的计划<br>    - [ ] 我们抄袭 rCore， 实现一个 Starfish 的内核<br>    - [ ] 同样抄袭 tornado 的 shared-schedule，实现一个 RingSchedule<br>    - [ ] Starfish + RingSchedule 做个杂糅<br>    - [ ] 最好能做测试</p>
+</div>
+
+</details>
+
+<h1 id="日記部分"><a href="#日記部分" class="headerlink" title="日記部分"></a>日記部分</h1><h2 id="2022-10"><a href="#2022-10" class="headerlink" title="2022-10"></a>2022-10</h2><div class="note warning no-icon"><p>做了一些文字上的工作，就基本上没有做什么。</p>
+</div>
+
+<h2 id="2022-11"><a href="#2022-11" class="headerlink" title="2022-11"></a>2022-11</h2><div class="note primary no-icon"><div class="note danger"><p>当下的情况是 <code>tornado-os</code>虽然编译过了，但是整体的项目还是没有跑通，难办。 😢</p>
+</div></div>
+
+<h1 id="常見錯誤"><a href="#常見錯誤" class="headerlink" title="常見錯誤"></a>常見錯誤</h1><details class="note danger"><summary><p><code>riscv-crate</code>版本的问题</p>
+</summary>
+
+</details>]]></content>
       <categories>
-        <category>cpp</category>
-        <category>loki</category>
+        <category>os</category>
+        <category>rcore</category>
       </categories>
       <tags>
-        <tag>loki</tag>
+        <tag>dev</tag>
       </tags>
   </entry>
   <entry>
@@ -1093,6 +1132,132 @@ WidgetInfo ..&gt; GenScatterHierarchy5 : 泛化
       </categories>
       <tags>
         <tag>loki</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淺談一下 SmartPtr</title>
+    <url>/2022/06/11/code/cpp/loki/SmartPtr/</url>
+    <content><![CDATA[<p>關於智能指針，這是一個十分誘人的主題，至少對於C++。對於C++而言，可以這麽説， smart pointers是最普及、最複雜、最强大的工具：其吸引人的地方在於，它涉及語法和語義上的很多議題。</p>
+<p>smart pointers 是一種C++對象，它提供<code>operator-&gt;</code>和<strong>unary</strong> <code>operator*</code>， 以此模擬一般指針（simple pointers）的行爲。除了提供指針的語法和語義，smart pointers 通常會在底層完成很多有用的工作（例如内存管理或鎖定操作），這麽以來，對於smart pointers所指對象的生命周期，應用程序就不必特意管理。</p>
+<span id="more"></span>
+
+
+<figure class="highlight bash"><figcaption><span>Import Demo</span></figcaption><table><tr><td class="code"><pre><span class="line">// &#123;\% include_code AllowConversion lang:cpp from:56 to:59 cpp/loki/SmartPtr.cpp \%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Smart-Pointers-基礎"><a href="#Smart-Pointers-基礎" class="headerlink" title="Smart Pointers 基礎"></a>Smart Pointers 基礎</h2><p>什麽是smart pointer?它是一個C++ class，在語法和某些語義上模擬一般指針，但提供更多功能。由於smart pointers指向“類型各異”之對象，所以他們勢必擁有大量共通代碼，所以現有的高質量smart pointers幾乎都以template完成，template參數為被指物（pointee）之型別，正如以下所見：</p>
+<figure class="highlight cpp"><figcaption><span>AllowConversion</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt; <span class="keyword">class</span> <span class="title class_">SmartPtr</span> &#123;</span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">SmartPtr</span><span class="params">(T* pointee)</span>: pointee_(pointee);</span></span><br><span class="line">    SmartPtr&amp; <span class="keyword">operator</span>=(<span class="type">const</span> SmartPtr&amp; other);</span><br><span class="line">    ~<span class="built_in">SmartPtr</span>();</span><br><span class="line marked">    T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> *pointee_;</span><br><span class="line">    &#125;</span><br><span class="line marked">    T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">      <span class="keyword">return</span> pointee_;</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    T* pointee_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="關於解構的-Policy"><a href="#關於解構的-Policy" class="headerlink" title="關於解構的 Policy"></a>關於解構的 Policy</h2><h3 id="OwnerPolicy"><a href="#OwnerPolicy" class="headerlink" title="OwnerPolicy"></a>OwnerPolicy</h3><h4 id="RefCounted"><a href="#RefCounted" class="headerlink" title="RefCounted"></a>RefCounted</h4><p>引用計數法，此法追蹤</p>
+<figure class="highlight cpp"><figcaption><span>RefCounted</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">P</span>&gt; <span class="keyword">class</span> <span class="title class_">RefCounted</span> &#123;</span><br><span class="line marked">    <span class="type">unsigned</span> <span class="type">int</span>* pCount_;</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">RefCounted</span>(): <span class="built_in">pCount_</span>(<span class="keyword">new</span> <span class="type">unsigned</span> <span class="built_in">int</span>(<span class="number">1</span>)) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">IsUnique</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> *pCount_ == <span class="number">1</span>; &#125;</span><br><span class="line">    <span class="function">P <span class="title">Clone</span><span class="params">(<span class="type">const</span> P&amp; val)</span> </span>&#123; ++*pCount_; <span class="keyword">return</span> val; &#125;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Release</span><span class="params">(<span class="type">const</span> P&amp;)</span> </span>&#123; <span class="keyword">if</span> (!--*pCount_) <span class="keyword">delete</span> pCount_; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Hello RefCounted!\n&quot;</span>; &#125;</span><br><span class="line">    <span class="keyword">enum</span> &#123; destructiveCopy = <span class="literal">false</span> &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+        <category>loki</category>
+      </categories>
+      <tags>
+        <tag>loki</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>toyDB的开发日记</title>
+    <url>/2022/11/12/dev/toyDB/dailyNote/</url>
+    <content><![CDATA[<p>toyDB 的开发日记</p>
+<span id="more"></span>
+
+
+<h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><div class="note info"><details class="note primary"><summary><p>文档资料</p>
+</summary>
+<p>🔖 关于 Raft 的文档</p>
+<ul>
+<li><a href="/2022/11/12/dev/toyDB/inc/raft/brief/" title="关于 Raft">关于 Raft</a></li>
+</ul>
+<p>:bookmark: 关于 BTree 的文档</p>
+<ul>
+<li><a href="/2022/11/12/dev/toyDB/inc/btree/brief/" title="关于 BTree">关于 BTree</a></li>
+</ul>
+
+</details>
+</div>
+]]></content>
+      <categories>
+        <category>db</category>
+        <category>toyDB</category>
+      </categories>
+      <tags>
+        <tag>dev</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BTree 简介</title>
+    <url>/2022/11/12/dev/toyDB/inc/btree/brief/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>raft 简介</title>
+    <url>/2022/11/12/dev/toyDB/inc/raft/brief/</url>
+    <content><![CDATA[<p>其实</p>
+<span id="more"></span>]]></content>
+      <categories>
+        <category>toyDB</category>
+        <category>raft</category>
+      </categories>
+      <tags>
+        <tag>raft,cluster</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Leetcode.790.多米诺和托米诺平铺</title>
+    <url>/2022/11/12/code/leetcode/problems/790/</url>
+    <content><![CDATA[<h1 id="每日一题-Leetcode-多米诺和托米诺平铺"><a href="#每日一题-Leetcode-多米诺和托米诺平铺" class="headerlink" title="每日一题 (Leetcode): 多米诺和托米诺平铺"></a>每日一题 (Leetcode): 多米诺和托米诺平铺</h1><p>题目链接：<a href="https://leetcode.cn/problems/domino-and-tromino-tiling/">790. 多米诺和托米诺平铺 - 力扣（LeetCode）</a></p>
+<span id="more"></span>
+
+<h2 id="方法一-动态规划"><a href="#方法一-动态规划" class="headerlink" title="方法一: 动态规划"></a>方法一: 动态规划</h2><p>考虑这么一种平铺的方式：在第<code>i</code>列前面的正方形都被瓷砖覆盖，在第<code>i</code>列后面的正方形都没有被瓷砖覆盖（<code>i</code>从<code>1</code>开始计数）。那么第<code>i</code>列的正方形有四种被覆盖的情况。</p>
+<ul>
+<li>一个正方形都没有被覆盖，记为状态<code>0</code>；</li>
+<li>只有上方的正方形被覆盖, 记为状态<code>1</code>；</li>
+<li>只有下方的正方形被覆盖，记为状态<code>2</code>；</li>
+<li>上下两个正方形都被覆盖，记为状态<code>3</code>；</li>
+</ul>
+<p>使用<code>dp[i][s]</code>表示平铺到第<code>i</code>列时，各个状态<code>s</code>对应的平铺方法数量。考虑第<code>i - 1</code>列和第<code>i</code>列正方形。他们之间的状态转移如下：</p>
+<p>初始时<code>dp[0][0] = 0</code>， <code>dp[0][1] = 0</code>，<code>dp[0][2] = 0</code>， <code>dp[0][3] = 1</code>，对应的状态转移方程为（<code>i &gt; 0</code>）：</p>
+<ul>
+<li><code>dp[i][0] = dp[i - 1][3]</code></li>
+<li><code>dp[i][1] = dp[i - 1][0] + dp[i - 1][2]</code></li>
+<li><code>dp[i][2] = dp[i - 1][0] + dp[i - 1][1]</code></li>
+<li><code>dp[i][3] = dp[i - 1][0] + dp[i - 1][1] + dp[i - 1][2] + dp[i - 1][3]</code></li>
+</ul>
+<p>最后平铺到第<code>n</code>列时，上下两个正方形都被覆盖的状态<code>dp[n][3]</code>对应的平铺方法数量就是总平铺方法数量。</p>
+<h3 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>时间复杂度： $\textbf{O}(n)$，其中<code>n</code>是总列数。<br>空间复杂度: $\textbf{O}(n)$。保存 <code>dp</code>数组需要$\textbf{O}(n)$的空间。</p>
+<h2 id="方法二：-数学"><a href="#方法二：-数学" class="headerlink" title="方法二： 数学"></a>方法二： 数学</h2><p>动态规划的方程</p>
+<p>$$<br>f(n) &#x3D; f(n - 1) + f(n - 2) + 2 * (f(n - 3) + f(n - 4) + \cdots + f(1) + 1)<br>$$</p>
+<p>这并不好求， 可以利用 <code>f(n - 1)</code> 消去多余的尾递归</p>
+<p>由此可以有</p>
+<p>$$<br>f(n) - f(n - 1) &#x3D; f(n - 1) + f(n - 3)<br>$$</p>
+<p>即：</p>
+<p>$$<br>f(n) &#x3D; 2 * f(n - 1) + f(n - 3)<br>$$</p>
+<p>所以就可以利用三个值来轮询求值</p>
+<p>其中<code>f(0) = 1</code>，<code>f(1) = 1</code>，<code>f(2) = 2</code></p>
+<h3 id="复杂度分析-1"><a href="#复杂度分析-1" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>时间复杂度： $\textbf{O}(n)$，其中<code>n</code>是总列数。<br>空间复杂度: $\textbf{O}(1)$。</p>
+<h2 id="方法三：-矩阵快速幂"><a href="#方法三：-矩阵快速幂" class="headerlink" title="方法三： 矩阵快速幂"></a>方法三： 矩阵快速幂</h2><p>通过 方法二 的数学分析，可以知道，平铺到某一列时的所有覆盖状态可以用一个列向量$\textrm{x}$来表示，那么初始时 $\textrm{x} &#x3D; [0\ 0\ 0\ 1]^{T}$。一次状态转移方程等于左边乘上矩阵</p>
+<p>$$\textbf{A} &#x3D; [\begin{matrix}<br>0&amp; 0&amp; 0&amp; 1\<br>1&amp; 0&amp; 1&amp; 0\<br>1&amp; 1&amp; 0&amp; 0\<br>1&amp; 1&amp; 1&amp; 1<br>\end{matrix}]$$</p>
+<p>那么<code>n</code>次状态转移后，所有覆盖状态对应的列向量为$\textbf{A}^{n} \textrm{x}$ ，其中$\textbf{A}^{n}$ 可以使用矩阵快速幂来计算。根据 $\textrm{x}$的值，可以知道最终所有的覆盖状态对应的列向量为$\textbf{A}^{n}$的第<code>3</code>列，返回该列向量的第<code>3</code>个元素即可。</p>
+<h3 id="复杂度分析-2"><a href="#复杂度分析-2" class="headerlink" title="复杂度分析"></a>复杂度分析</h3><p>时间复杂度： $\textbf{O}(\log n)$，其中<code>n</code>是总列数。<br>空间复杂度: $\textbf{O}(1)$</p>
+<h1 id="参考题解"><a href="#参考题解" class="headerlink" title="参考题解"></a>参考题解</h1><details class="note info no-icon"><summary><p>相关的参考代码</p>
+</summary>
+<figure class="highlight rust"><figcaption><span>false</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="keyword">impl</span> <span class="title class_">Math</span> <span class="keyword">for</span> <span class="title class_">Solution</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">trait</span> <span class="title class_">DP</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">num_tilings</span>(n: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">MOD</span>: <span class="type">u32</span> = <span class="number">1_000_000_007</span>;</span><br><span class="line">        <span class="keyword">if</span> <span class="number">0</span> == n &#123; <span class="number">1</span> &#125; <span class="keyword">else</span> <span class="keyword">if</span> <span class="number">1</span> == n &#123; <span class="number">1</span> &#125; <span class="keyword">else</span> <span class="keyword">if</span> <span class="number">2</span> == n &#123; <span class="number">2</span> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">dp</span> = <span class="built_in">vec!</span>[<span class="number">0u32</span>; <span class="number">4</span>]; dp[<span class="number">0</span>] = <span class="number">1</span>; dp[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">for</span> <span class="variable">_</span> <span class="keyword">in</span> <span class="number">2</span>..=n &#123;</span><br><span class="line">                dp[<span class="number">3</span>] = dp[<span class="number">1</span>] % MOD;</span><br><span class="line">                dp[<span class="number">1</span>] = dp[<span class="number">1</span>] % MOD + dp[<span class="number">0</span>] % MOD + <span class="number">2</span> * dp[<span class="number">2</span>] % MOD;</span><br><span class="line">                dp[<span class="number">2</span>] = dp[<span class="number">0</span>] % MOD + dp[<span class="number">2</span>] % MOD;</span><br><span class="line">                dp[<span class="number">0</span>] = dp[<span class="number">3</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            (dp[<span class="number">1</span>] % MOD) <span class="keyword">as</span> <span class="type">i32</span></span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">trait</span> <span class="title class_">MatrixPow</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">num_tilings</span>(n: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">multiply</span>(multiplier: &amp;[<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;], multiplicand: &amp;[<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;]) <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">MOD</span>: <span class="type">u64</span> = <span class="number">1_000_000_007</span>;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">result</span>: <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt; = <span class="built_in">vec!</span>[];</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">temp</span>: <span class="type">u64</span>;</span><br><span class="line">            <span class="keyword">for</span> <span class="variable">row_left</span> <span class="keyword">in</span> <span class="number">0</span>..multiplier.<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">                result.<span class="title function_ invoke__">push</span>(<span class="built_in">vec!</span>[]);</span><br><span class="line">                <span class="keyword">for</span> <span class="variable">column_right</span> <span class="keyword">in</span> <span class="number">0</span>..multiplicand[<span class="number">0</span>].<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">                    temp = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">for</span> <span class="variable">row_right</span> <span class="keyword">in</span> <span class="number">0</span>..multiplicand.<span class="title function_ invoke__">len</span>() &#123;</span><br><span class="line">                        temp = (temp + multiplier[row_left][row_right] * multiplicand[row_right][column_right]) % MOD;</span><br><span class="line">                    &#125;</span><br><span class="line">                    result[row_left].<span class="title function_ invoke__">push</span>(temp);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            result</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">fn</span> <span class="title function_">matrix_pow</span>(<span class="keyword">mut</span> mat: <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt;, <span class="keyword">mut</span> n: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt; &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">ret</span>: <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt; = <span class="built_in">vec!</span>[</span><br><span class="line">                <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">                <span class="built_in">vec!</span>[<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">                <span class="built_in">vec!</span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">                <span class="built_in">vec!</span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">            ];</span><br><span class="line">            <span class="keyword">while</span> <span class="number">0</span> != n &#123;</span><br><span class="line">                <span class="keyword">if</span> <span class="number">1</span> &amp; n != <span class="number">0</span> &#123;</span><br><span class="line">                    ret = <span class="title function_ invoke__">multiply</span>(&amp;ret, &amp;mat);</span><br><span class="line">                &#125;</span><br><span class="line">                n &gt;&gt;= <span class="number">1i32</span>;</span><br><span class="line">                mat = <span class="title function_ invoke__">multiply</span>(&amp;mat, &amp;mat);</span><br><span class="line">            &#125;</span><br><span class="line">            ret</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">mat</span>: <span class="type">Vec</span>&lt;<span class="type">Vec</span>&lt;<span class="type">u64</span>&gt;&gt; = <span class="built_in">vec!</span>[</span><br><span class="line">            <span class="built_in">vec!</span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>],</span><br><span class="line">            <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">            <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>],</span><br><span class="line">            <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">        ];</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">res</span> = <span class="title function_ invoke__">matrix_pow</span>(mat, n);</span><br><span class="line">        res[<span class="number">3</span>][<span class="number">3</span>] <span class="keyword">as</span> <span class="type">i32</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">trait</span> <span class="title class_">Math</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">num_tilings</span>(n: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="number">1</span> == n &#123; <span class="number">1</span> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> <span class="variable">MOD</span>: <span class="type">u32</span> = <span class="number">1_000_000_007</span>;</span><br><span class="line">            <span class="keyword">let</span> (<span class="keyword">mut</span> a, <span class="keyword">mut</span> b, <span class="keyword">mut</span> c) = (<span class="number">1u32</span>, <span class="number">1u32</span>, <span class="number">2u32</span>);</span><br><span class="line">            <span class="keyword">for</span> <span class="variable">i</span> <span class="keyword">in</span> <span class="number">3</span>..=n &#123;</span><br><span class="line">                <span class="keyword">let</span> <span class="variable">temp</span> = (c * <span class="number">2</span> + a) % MOD;</span><br><span class="line">                a = b;</span><br><span class="line">                b = c;</span><br><span class="line">                c = temp;</span><br><span class="line">            &#125;</span><br><span class="line">            c <span class="keyword">as</span> <span class="type">i32</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>]]></content>
+      <categories>
+        <category>leetcode</category>
+        <category>202211code</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>DP</tag>
+        <tag>Math</tag>
+        <tag>MatrixPow</tag>
       </tags>
   </entry>
 </search>
