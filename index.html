@@ -262,7 +262,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>其实这是自己大学曾经研究过的 协议一致性算法，比价经典的算法设计。</p>
+          <p>当今许多新型应用都属于数据密集型（<strong>data-intensive</strong>）,而不是计算密集型(<strong>compute-intensive</strong>)。对于这些类型应用，CPU的处理能力往往不是第一限制性因素，关键在于数据量、数据的复杂度及数据的快速多变性。</p>
+<p>近年来出现了许多用于数据存储和处理的新工具。它们针对各种不同的应用场景进行优化,不适合再归为传统类型。例如, <strong>Redis</strong>既可以用于数据存储也适用于消息队列, <strong>Apache Kafka</strong>作为消息队列也具备了持久化存储保证。系统之间的界限正在变得模糊。</p>
+<p>越来越多的应用系统需求广泛，单个组件往往无法满足所有数据处理与存储需求。因而需要将任务分解，每个组件负责高效完成其中一部分，多个组件依靠应用层代码驱动有机衔接起来。</p>
+<p>分布式存储系统通常通过维护多个副本来进行容错，提高系统的可用性。要实现此目标，就必须要解决分布式存储系统的最核心问题：维护多个副本的一致性。</p>
+<p><strong>Raft</strong> 作为一致性协议就是用来干这事的，保证即使在部分(确切地说是小部分)副本宕机的情况下，系统仍然能正常对外提供服务。一致性协议通常基于<strong>replicated state machines</strong>，即所有结点都从同一个$\verb|state|$出发，都经过同样的一些操作序列（$\verb|log|$），最后到达同样的$\verb|state|$。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/11/12/dev/toyDB/inc/raft/brief/#more" rel="contents">
