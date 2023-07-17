@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://andre-hjr.github.io/sitemap.xml
