@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>qt on PineHat&#39;s Blog</title>
+    <link>https://andre-hjr.github.io/categories/qt/</link>
+    <description>Recent content in qt on PineHat&#39;s Blog</description>
+    <image>
+      <title>PineHat&#39;s Blog</title>
+      <url>https://andre-hjr.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://andre-hjr.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 29 Jul 2023 01:28:00 -0400</lastBuildDate><atom:link href="https://andre-hjr.github.io/categories/qt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Qt Crossing Finger</title>
+      <link>https://andre-hjr.github.io/posts/2023/07/qt_crossing_finger/</link>
+      <pubDate>Sat, 29 Jul 2023 01:28:00 -0400</pubDate>
+      
+      <guid>https://andre-hjr.github.io/posts/2023/07/qt_crossing_finger/</guid>
+      <description>Basic Knownledge About Q_OBJECT The Q_OBJECT macro at the begining of the class definition is necessary for all classes that define ssignals or slots.
+Signal and Slots The signal and slots mechanism is the core of QT, and to be proficient in QT work, Understanding of the signal and slot is required.
+Signals and Slots are high-level interfaces for communication between objects, which are a core feature of QT and important differentiator between QT and other Cpp-Tookits.</description>
+    </item>
+    
+  </channel>
+</rss>

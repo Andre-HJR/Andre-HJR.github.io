@@ -11,7 +11,28 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 17 Jul 2023 13:32:00 -0400</lastBuildDate><atom:link href="https://andre-hjr.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 29 Jul 2023 01:28:00 -0400</lastBuildDate><atom:link href="https://andre-hjr.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Qt Crossing Finger</title>
+      <link>https://andre-hjr.github.io/posts/2023/07/qt_crossing_finger/</link>
+      <pubDate>Sat, 29 Jul 2023 01:28:00 -0400</pubDate>
+      
+      <guid>https://andre-hjr.github.io/posts/2023/07/qt_crossing_finger/</guid>
+      <description>Basic Knownledge About Q_OBJECT The Q_OBJECT macro at the begining of the class definition is necessary for all classes that define ssignals or slots.
+Signal and Slots The signal and slots mechanism is the core of QT, and to be proficient in QT work, Understanding of the signal and slot is required.
+Signals and Slots are high-level interfaces for communication between objects, which are a core feature of QT and important differentiator between QT and other Cpp-Tookits.</description>
+    </item>
+    
+    <item>
+      <title>CMake Compile Toolchain</title>
+      <link>https://andre-hjr.github.io/posts/2023/07/cmake_compile_toolchain/</link>
+      <pubDate>Fri, 28 Jul 2023 12:25:00 -0400</pubDate>
+      
+      <guid>https://andre-hjr.github.io/posts/2023/07/cmake_compile_toolchain/</guid>
+      <description>CMake is an open-source, cross-platform family of tools designed to build, test and package software.Cmake is used to control the software compliation process using simple platform and compiler independent configuration files, and generate native makefiles and workspaces that cna be used in the compiler environment of your choice.
+ # Assume in Project Root cmake -S. -Bbuild cmake --build build [--target docs] ctest --test-dir=build -C Debug -VV # Use ctest for project&amp;#39;s test.</description>
+    </item>
+    
     <item>
       <title>Hugo in Org-Mode</title>
       <link>https://andre-hjr.github.io/posts/2023/07/note/</link>
