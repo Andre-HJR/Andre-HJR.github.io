@@ -103,6 +103,30 @@ HJR Docs 技术文档
       +++
       **内容涵盖：** 传输线 · S 参数 · 史密斯圆图 · 匹配网络 · PCB 设计 · ADS 仿真 · 测量
 
+   .. grid-item-card:: 📶 ESP32 嵌入式开发
+      :link: esp32/index
+      :link-type: doc
+
+      WiFi/BLE 无线 MCU 开发
+      ^^^^^^^^^^^^^^^^^^^^^^^
+      乐鑫 ESP32 系列是物联网领域最广泛使用的无线 MCU。
+      从 ESP-IDF 到 MicroPython，系统掌握 ESP32 开发。
+
+      +++
+      **内容涵盖：** ESP-IDF · MicroPython · FreeRTOS · WiFi/BLE · 外设驱动 · 调试
+
+   .. grid-item-card:: ⚡ DSP TMS320F28335
+      :link: dsp/index
+      :link-type: doc
+
+      数字信号处理器开发
+      ^^^^^^^^^^^^^^^^^^
+      TI C2000 系列 DSP 是数字电源、电机控制和逆变器的核心芯片。
+      从 CCS 环境到 ePWM/ADC 外设，掌握工业级 DSP 开发。
+
+      +++
+      **内容涵盖：** CCS IDE · 系统控制 · ePWM · ADC · eQEP · CAN · Flash 编程
+
 .. toctree::
    :maxdepth: 2
    :caption: ⚙️ C 语言
@@ -151,6 +175,20 @@ HJR Docs 技术文档
    :numbered:
 
    rf/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 📶 ESP32
+   :numbered:
+
+   esp32/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: ⚡ DSP F28335
+   :numbered:
+
+   dsp/index
 
 --------------
 
