@@ -31,7 +31,8 @@ jobs:
           pip install sphinx sphinx-autobuild sphinx-rtd-theme myst-parser \
             sphinx-copybutton sphinx-design sphinxcontrib-mermaid \
             sphinxext-opengraph sphinx-autodoc-typehints sphinx-togglebutton \
-            sphinx-markdown-tables autodocsumm sphinx-basic-ng
+            sphinx-markdown-tables autodocsumm sphinx-basic-ng \
+            sphinx-sitemap
 
       - name: 构建文档
         run: |
