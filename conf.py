@@ -43,6 +43,8 @@ extensions = [
     'sphinx.ext.viewcode',
     # 交叉引用
     'sphinx.ext.intersphinx',
+    # SEO 站点地图
+    'sphinx_sitemap',
 ]
 
 templates_path = ['_templates']
@@ -87,6 +89,19 @@ html_theme_options = {
     'includehidden': True,
     'titles_only': False,
 }
+
+# -- SEO 配置（搜索引擎优化） -------------------------------------------------
+# 站点正式 URL（sitemap + Open Graph 必需）
+html_baseurl = 'https://Andre-HJR.github.io/'
+
+# Open Graph 社交卡片（sphinxext-opengraph）
+ogp_site_url = html_baseurl
+ogp_site_name = 'HJR Docs'
+ogp_image = ''
+ogp_description_length = 200
+
+# Sitemap 站点地图（sphinx-sitemap）
+sitemap_url_scheme = '{link}'
 
 # -- MathJax 配置 -----------------------------------------------------------
 # 使用 MathJax 3 稳定版（而非 Sphinx 9 默认的 v4 beta）
