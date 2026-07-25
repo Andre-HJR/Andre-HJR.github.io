@@ -78,7 +78,7 @@ html_static_path = ['_static']
 html_logo = ''
 html_favicon = ''
 html_css_files = []
-html_js_files = ['pagefind-init.js']
+html_js_files = []
 
 html_theme_options = {
     'navigation_depth': 4,
