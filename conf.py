@@ -78,7 +78,10 @@ html_static_path = ['_static']
 html_logo = ''
 html_favicon = ''
 html_css_files = []
-html_js_files = []
+html_js_files = ['pagefind-init.js']
+
+# -- Pagefind 搜索配置（构建后处理，见 .github/workflows/deploy.yml）--------
+html_theme_options['pagefind'] = True
 
 html_theme_options = {
     'navigation_depth': 4,
