@@ -37,6 +37,15 @@ jobs:
         run: |
           sphinx-build -b html . _build/html
 
+      - name: 设置 Node.js（Pagefind 搜索）
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 运行 Pagefind 搜索索引
+        run: |
+          npx pagefind --source _build/html
+
       - name: 上传构建产物
         uses: actions/upload-pages-artifact@v3
         with:
