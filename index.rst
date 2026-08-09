@@ -19,7 +19,7 @@ HJR Docs 技术文档
       VC10（Visual C++ 2010）是 Windows 平台经典的开发环境。
 
       +++
-      **内容涵盖：** 语法基础 · 指针 · 结构体 · 文件 I/O · 预处理器 · VC10 调试
+      **内容涵盖：** 语法基础 · 指针 · 结构体 · 文件 I/O · 预处理器 · VC10 调试 · 项目实践（XTF-CORE）
 
    .. grid-item-card:: 📐 Fortran 基础
       :link: fortran/index
@@ -55,7 +55,7 @@ HJR Docs 技术文档
       移动端、Web 端和桌面端应用。基于 Dart 语言和自绘引擎。
 
       +++
-      **内容涵盖：** Dart 语言 · Widget 体系 · 布局 · 状态管理 · 路由 · 网络 · 平台集成
+      **内容涵盖：** Dart 语言 · Widget 体系 · 布局 · 状态管理 · 路由 · 网络 · 平台集成 · 项目实践（蓝牙 MCU 控制器）
 
    .. grid-item-card:: 🎯 C# 编程基础
       :link: csharp/index
@@ -68,6 +68,18 @@ HJR Docs 技术文档
 
       +++
       **内容涵盖：** 语言基础 · OOP · LINQ · async/await · WinForms · WPF + MVVM · EF Core
+
+   .. grid-item-card:: 🛠️ 开发项目
+      :link: projects/index
+      :link-type: doc
+
+      亲手完成的项目展示
+      ^^^^^^^^^^^^^^^^^^^
+      汇总 HJR 的独立开发实践：测井文件解析库与 BLE 蓝牙控制器，
+      附架构图、开发记录与踩坑复盘。
+
+      +++
+      **项目：** XTF-CORE 测井解析库 · 蓝牙 MCU 控制器
 
 统计与机器学习
 ----------------
@@ -161,6 +173,13 @@ HJR Docs 技术文档
    :numbered:
 
    csharp/index
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 🛠️ 开发项目
+   :numbered:
+
+   projects/index
 
 .. toctree::
    :maxdepth: 2

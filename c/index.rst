@@ -16,3 +16,4 @@ C 语言基础
    08-file-io
    09-preprocessor
    10-vc10-debug
+   11-project-xtf-core
