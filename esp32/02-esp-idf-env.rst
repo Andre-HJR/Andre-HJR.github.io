@@ -179,4 +179,4 @@ ESP-IDF（Espressif IoT Development Framework）是乐鑫官方 SDK，基于 Fre
    * - 串口打不开 (Windows)
      - 安装 CP2102 / CH340 驱动
    * - 编译速度慢
-     - ``idf.py build -j4``（指定并行任务数）
+     - ``idf.py build -j4``，即指定并行任务数

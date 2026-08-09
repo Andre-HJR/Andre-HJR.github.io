@@ -41,7 +41,7 @@ ESP-IDF 基于 FreeRTOS，多任务编程是 ESP32 的核心能力。
 
 .. note::
 
-   ESP-IDF 中 FreeRTOS 的优先级范围是 **0~25**（数字越大优先级越高）。
+   ESP-IDF 中 FreeRTOS 的优先级范围是 **0~25**，数字越大优先级越高。
    空闲任务优先级为 0，Timer 服务任务优先级为 1。
 
 多核任务
