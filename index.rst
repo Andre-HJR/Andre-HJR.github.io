@@ -19,7 +19,7 @@ HJR Docs 技术文档
       VC10（Visual C++ 2010）是 Windows 平台经典的开发环境。
 
       +++
-      **内容涵盖：** 语法基础 · 指针 · 结构体 · 文件 I/O · 预处理器 · VC10 调试 · 项目实践（XTF-CORE）
+      **内容涵盖：** 语法基础 · 指针 · 结构体 · 文件 I/O · 预处理器 · VC10 调试 · 项目实践（XTF-CORE / LAS-CORE）
 
    .. grid-item-card:: 📐 Fortran 基础
       :link: fortran/index

@@ -21,6 +21,19 @@
       +++
       **语言：** 纯 C89/C90 · **规模：** 约 7,100 行 · **许可：** GPL-3.0
 
+   .. grid-item-card:: 🗂️ LAS-CORE
+      :link: ../c/12-project-las-core
+      :link-type: doc
+      :text-align: center
+
+      测井数据解析库
+      ^^^^^^^^^^^^^^^^^
+      纯 C89/C90 编写、零第三方依赖的 LAS 2.0 / 3.0 文本格式解析 / 生成库，
+      支持版本双向转换，附 Fortran / Python / C# / Lua 四种语言绑定。
+
+      +++
+      **语言：** 纯 C89/C90 · **规模：** 约 4,900 行 · **许可：** GPL-3.0
+
    .. grid-item-card:: 📱 蓝牙 MCU 控制器
       :link: ../flutter/09-project-bt-mcu-controller
       :link-type: doc
@@ -52,6 +65,12 @@
      - 约 7,100 行
      - GPL-3.0
      - :doc:`C 语言基础 <../c/index>`
+   * - :doc:`LAS-CORE <../c/12-project-las-core>`
+     - 纯 C89/C90
+     - LAS 2.0 / 3.0 测井数据文件解析 / 生成库
+     - 约 4,900 行
+     - GPL-3.0
+     - :doc:`C 语言基础 <../c/index>`
    * - :doc:`蓝牙 MCU 控制器 <../flutter/09-project-bt-mcu-controller>`
      - Flutter + Dart + C（NDK）
      - Android BLE 串口助手
@@ -61,6 +80,7 @@
 
 .. seealso::
 
-   项目详细页分别位于 C 语言章节（:doc:`XTF-CORE <../c/11-project-xtf-core>`）
+   项目详细页分别位于 C 语言章节（:doc:`XTF-CORE <../c/11-project-xtf-core>`、
+   :doc:`LAS-CORE <../c/12-project-las-core>`）
    与 Flutter 章节（:doc:`蓝牙 MCU 控制器 <../flutter/09-project-bt-mcu-controller>`）。
    每个项目页含完整的架构图、开发记录与踩坑复盘。

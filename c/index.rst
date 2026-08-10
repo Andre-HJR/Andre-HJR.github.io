@@ -17,3 +17,4 @@ C 语言基础
    09-preprocessor
    10-vc10-debug
    11-project-xtf-core
+   12-project-las-core
